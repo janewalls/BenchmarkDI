@@ -5,33 +5,32 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-# ViReMa simulation code 
+# DITector - INDEL simulation code 
 
 fastaFile = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/example.fasta"
 maxLength = 188
 totalReads = 50
 count = 0
 
-n = int(maxLength/2)
-
 reads = []
 summary = []
 
 
 for refGenome in SeqIO.parse(fastaFile, "fasta"):
-	lenGenome = len(refGenome) - n # Get length of genome (# of nucleotides)
+	lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
 	print(lenGenome)
 
 	while count <= totalReads:
 		while True:
-			pos1 = random.randint(1,lenGenome)
-			pos2 = random.randint(1,lenGenome)
+			bP = random.randint(1,(lenGenome - maxLength))
+            rI = random.randint(1,lenGenome)
+			j = random.randint(j,maxLength)
 
-			if ((pos2 > pos1 + n) or (pos1 > pos2 + n)):
+			if ((ri > bp + j) or (bp > ri + j)):
 				break
-
-		seq1 = str(refGenome.seq[pos1:(pos1+n)])
-		seq2 = str(refGenome.seq[pos2:(pos2+n)])
+    
+		seq1 = str(refGenome.seq[bP:(bP+j)])
+		seq2 = str(refGenome.seq[(rI - (maxLength-j)):rI])
 
 		count += 1
 		dI = seq1 + seq2
@@ -45,11 +44,11 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		)	
 
 		reads.append(rec)
-		summary.append([count, pos1, pos1+n, pos2, pos2+n])
+		summary.append([count, bP, bP+j, (rI - (maxLength-j)), rI])
 
-	SeqIO.write(reads, "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimulatedViReMa.fasta", "fasta")
+	SeqIO.write(reads, "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.fasta", "fasta")
 	
-	summaryFile = open("/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimulatedViReMa.csv", "w")
+	summaryFile = open("/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.csv", "w")
 
 	count = 0
 	while count < totalReads:
