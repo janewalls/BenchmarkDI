@@ -43,7 +43,6 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		dI = seq1 + seq2
 
 
-		print(type(dI))
 		rec = SeqRecord(
     		Seq(dI,),
     		id="test|test|gb|ABC123.4|ABC123_4",
