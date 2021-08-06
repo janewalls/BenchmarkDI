@@ -7,15 +7,21 @@ from Bio.SeqRecord import SeqRecord
 
 # ViReMa simulation code 
 
+# Adjustable parameters 
 fastaFile = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/example.fasta"
 maxLength = 188
 totalReads = 50
 count = 0
 
-n = int(maxLength/2)
+readOutput = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimulatedViReMa.fasta"
+summaryOutput = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimulatedViReMa.csv"
 
+# Initialise 
 reads = []
-summary = []
+
+summaryFile = open(summaryOutput, "w")
+
+n = int(maxLength/2)
 
 
 for refGenome in SeqIO.parse(fastaFile, "fasta"):
@@ -45,15 +51,9 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		)	
 
 		reads.append(rec)
-		summary.append([count, pos1, pos1+n, pos2, pos2+n])
 
-	SeqIO.write(reads, "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimulatedViReMa.fasta", "fasta")
+		summaryFile.write(count + "\t" + pos1 + "\t" + pos1+n + "\t" + pos2 + "\t" + pos2+n + "\n")
+
+	SeqIO.write(reads, readOutput, "fasta")
 	
-	summaryFile = open("/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimulatedViReMa.csv", "w")
-
-	count = 0
-	while count < totalReads:
-		print(count)
-		summaryFile.write(str(summary[count][0]) + "\t" + str(summary[count][1]) + "\t" + str(summary[count][2]) + "\t" + str(summary[count][3]) + "\t" + str(summary[count][4]) + "\n")
-		count += 1
 	summaryFile.close()
