@@ -23,28 +23,28 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 	while count <= totalReads:
 		while True:
 			bP = random.randint(1,(lenGenome - maxLength))
-            rI = random.randint(1,lenGenome)
+			rI = random.randint(1,lenGenome)
 			j = random.randint(j,maxLength)
-
-			if ((ri > bp + j) or (bp > ri + j)):
+			
+			if ((rI > bP + j) or (bP > rI + j)):
 				break
-    
-		seq1 = str(refGenome.seq[bP:(bP+j)])
-		seq2 = str(refGenome.seq[(rI - (maxLength-j)):rI])
+        
+        seq1 = str(refGenome.seq[bP:(bP+j)])
+        seq2 = str(refGenome.seq[(rI - (maxLength-j)):rI])
 
-		count += 1
-		dI = seq1 + seq2
+        count += 1
+        dI = seq1 + seq2
 
 
-		print(type(dI))
-		rec = SeqRecord(
+        print(type(dI))
+        rec = SeqRecord(
     		Seq(dI,),
     		id="test|test|gb|ABC123.4|ABC123_4",
     		description="test DIPs",
 		)	
 
-		reads.append(rec)
-		summary.append([count, bP, bP+j, (rI - (maxLength-j)), rI])
+        reads.append(rec)
+        summary.append([count, bP, bP+j, (rI - (maxLength-j)), rI])
 
 	SeqIO.write(reads, "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.fasta", "fasta")
 	
@@ -55,4 +55,5 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		print(count)
 		summaryFile.write(str(summary[count][0]) + "\t" + str(summary[count][1]) + "\t" + str(summary[count][2]) + "\t" + str(summary[count][3]) + "\t" + str(summary[count][4]) + "\n")
 		count += 1
+
 	summaryFile.close()
