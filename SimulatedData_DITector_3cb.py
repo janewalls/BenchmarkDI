@@ -5,7 +5,7 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-# DITector - INDEL simulation code 
+# DITector - 5' copy back simulation code 
 
 # Adjustable parameters 
 fastaFile = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/example.fasta"
@@ -34,8 +34,9 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 			if bP < rI:
 				break
 		
-		seq1 = str(refGenome.seq[(bP-frag1):bP])
-		seq2 = str(refGenome.seq[rI:(rI+frag2)])
+		seq1 = str(refGenome.seq[(bP-frag1):bP]) 
+
+		seq2 = str(refGenome.seq[rI:(rI+frag2)].reverse_compliment()) # Finds sequence, then reverse compliment
 
 		count += 1
 		dI = seq1 + seq2
