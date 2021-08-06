@@ -34,12 +34,12 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 			if bP < rI:
 				break
 		
-		seq1 = str(refGenome.seq[(bP-frag1):bP].reverse_compliment()) # Finds sequence, then reverse compliment
-
-		seq2 = str(refGenome.seq[rI:(rI+frag2)])
+		seq1 = str(refGenome.seq[(bP-frag1):bP]) # Finds sequence, then reverse compliment
+		seq2 = str(refGenome.seq[(bP-frag1):bP].reverse_compliment())  # reverse compliment on 5' end
+		seq3 = str(refGenome.seq[rI:(rI+frag2)])
 
 		count += 1
-		dI = seq1 + seq2
+		dI = seq1 + seq2 + seq3
 
 		rec = SeqRecord(
 			Seq(dI,),

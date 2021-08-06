@@ -5,7 +5,7 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-# DITector - 5' copy back simulation code 
+# DITector - 3' copy back simulation code 
 
 # Adjustable parameters 
 fastaFile = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/example.fasta"
@@ -35,11 +35,11 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 				break
 		
 		seq1 = str(refGenome.seq[(bP-frag1):bP]) 
-
-		seq2 = str(refGenome.seq[rI:(rI+frag2)].reverse_compliment()) # Finds sequence, then reverse compliment
+		seq2 = str(refGenome.seq[rI:(rI+frag2)]) # Finds sequence
+		seq3 = str(refGenome.seq[rI:(rI+frag2)].reverse_compliment()) # Then reverse compliment for 3'
 
 		count += 1
-		dI = seq1 + seq2
+		dI = seq1 + seq2 + seq3
 
 		rec = SeqRecord(
 			Seq(dI,),
