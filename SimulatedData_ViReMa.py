@@ -52,7 +52,7 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 
 		reads.append(rec)
 
-		summaryFile.write(count + "\t" + pos1 + "\t" + pos1+n + "\t" + pos2 + "\t" + pos2+n + "\n")
+		summaryFile.write(str(count) + "\t" + str(pos1) + "\t" + str(pos1+n) + "\t" + str(pos2) + "\t" + str(pos2+n) + "\n")
 
 	SeqIO.write(reads, readOutput, "fasta")
 	

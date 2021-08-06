@@ -28,15 +28,16 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 
 	while count <= totalReads:
 		while True:
-			j = random.randint(1,maxLength)			
-			bP = random.randint(1,(lenGenome - maxLength))
-			rI = random.randint(maxLength,lenGenome)
+			frag1 = random.randint(1,maxLength)
+			frag2 = maxLength - frag1
+			bP = random.randint(frag1,(lenGenome - frag2))
+			rI = random.randint(frag1,(lenGenome - frag2))
 			
-			if ((rI - (maxLength-j) > bP + j) or (bP > rI)):
+			if bP < rI:
 				break
 		
-		seq1 = str(refGenome.seq[bP:(bP+j)])
-		seq2 = str(refGenome.seq[(rI - (maxLength-j)):rI])
+		seq1 = str(refGenome.seq[(bP-frag1):bP])
+		seq2 = str(refGenome.seq[rI:(rI+frag2)])
 
 		count += 1
 		dI = seq1 + seq2
@@ -51,7 +52,7 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 
 		reads.append(rec)
 
-		summaryFile.write(count + "\t" + bP + "\t" + bP+j + "\t" + (rI - (maxLength-j)) + "\t" + rI + "\n")
+		summaryFile.write(str(count) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\n")
 
 	SeqIO.write(reads, readOutput, "fasta")
 
