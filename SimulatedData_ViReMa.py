@@ -26,7 +26,6 @@ n = int(maxLength/2)
 
 for refGenome in SeqIO.parse(fastaFile, "fasta"):
 	lenGenome = len(refGenome) - n # Get length of genome (# of nucleotides)
-	print(lenGenome)
 
 	while count <= totalReads:
 		while True:
