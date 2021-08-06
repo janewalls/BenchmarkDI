@@ -47,7 +47,7 @@ def main(argv):
 	for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
 
-		while count <= totalReads:
+		while count < totalReads:
 			while True:
 				frag1 = random.randint(1,maxLength)
 				frag2 = maxLength - frag1
@@ -57,7 +57,8 @@ def main(argv):
 				if bP < rI:
 					break
 			
-			seq1 = str(refGenome.seq[(bP-frag1):bP].reverse_compliment())  # reverse compliment on 5' end
+			seq1 = refGenome.seq[(bP-frag1):bP]  # reverse compliment on 5' end
+			seq1 = str(seq1.reverse_complement())
 			seq2 = str(refGenome.seq[(bP-frag1):bP]) # Finds sequence
 			seq3 = str(refGenome.seq[rI:(rI+frag2)])
 
@@ -70,11 +71,11 @@ def main(argv):
 				description="test DIPs",
 			)
 
-			reads.append(rec)
+			reads.append(rec) # Adds new reads to list
 
-			summaryFile.write(str(count) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\n")
+			summaryFile.write(str(count) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\n") # Save summary info to file
 
-		SeqIO.write(reads, readOutput, "fasta")
+		SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
 
 		summaryFile.close()
 

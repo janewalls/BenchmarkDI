@@ -50,10 +50,10 @@ def main(argv):
 	for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		lenGenome = len(refGenome) - n # Get length of genome (# of nucleotides)
 
-		while count <= totalReads:
+		while count < totalReads:
 			while True:
-				pos1 = random.randint(1,lenGenome)
-				pos2 = random.randint(1,lenGenome)
+				pos1 = random.randint(0,lenGenome)
+				pos2 = random.randint(0,lenGenome)
 
 				if ((pos2 > pos1 + n) or (pos1 > pos2 + n)):
 					break
@@ -64,18 +64,18 @@ def main(argv):
 			count += 1
 			dI = seq1 + seq2
 
-
+			
 			rec = SeqRecord(
 				Seq(dI,),
 				id="test|test|gb|ABC123.4|ABC123_4",
 				description="test DIPs",
 			)	
 
-			reads.append(rec)
+			reads.append(rec) # Adds new reads to list
 
-			summaryFile.write(str(count) + "\t" + str(pos1) + "\t" + str(pos1+n) + "\t" + str(pos2) + "\t" + str(pos2+n) + "\n")
+			summaryFile.write(str(count) + "\t" + str(pos1) + "\t" + str(pos1+n) + "\t" + str(pos2) + "\t" + str(pos2+n) + "\n") # Save summary info to file
 
-		SeqIO.write(reads, readOutput, "fasta")
+		SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
 		
 		summaryFile.close()
 
