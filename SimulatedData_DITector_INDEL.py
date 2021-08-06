@@ -7,14 +7,20 @@ from Bio.SeqRecord import SeqRecord
 
 # DITector - INDEL simulation code 
 
+# Adjustable parameters 
 fastaFile = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/example.fasta"
 maxLength = 188
 totalReads = 50
 count = 0
 
+readOutput = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.fasta"
+summaryOutput = "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.csv"
+
+#Initialising lists
 reads = []
 summary = []
 
+summaryFile = open(summaryOutput, "w")
 
 for refGenome in SeqIO.parse(fastaFile, "fasta"):
 	lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
@@ -24,9 +30,9 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		while True:
 			j = random.randint(1,maxLength)			
 			bP = random.randint(1,(lenGenome - maxLength))
-			rI = random.randint(j,lenGenome)
+			rI = random.randint(maxLength,lenGenome)
 			
-			if ((rI > bP + j) or (bP > rI + j)):
+			if ((rI - (maxLength-j) > bP + j) or (bP > rI)):
 				break
 		
 		seq1 = str(refGenome.seq[bP:(bP+j)])
@@ -44,16 +50,9 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		)	
 
 		reads.append(rec)
-		summary.append([count, bP, bP+j, (rI - (maxLength-j)), rI])
 
-	SeqIO.write(reads, "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.fasta", "fasta")
-	
-	summaryFile = open("/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.csv", "w")
+		summaryFile.write(count + "\t" + bP + "\t" + bP+j + "\t" + (rI - (maxLength-j)) + "\t" + rI + "\n")
 
-	count = 0
-	while count < totalReads:
-		print(count)
-		summaryFile.write(str(summary[count][0]) + "\t" + str(summary[count][1]) + "\t" + str(summary[count][2]) + "\t" + str(summary[count][3]) + "\t" + str(summary[count][4]) + "\n")
-		count += 1
+	SeqIO.write(reads, readOutput, "fasta")
 
 	summaryFile.close()
