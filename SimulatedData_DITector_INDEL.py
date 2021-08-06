@@ -28,23 +28,23 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 			
 			if ((rI > bP + j) or (bP > rI + j)):
 				break
-        
-        seq1 = str(refGenome.seq[bP:(bP+j)])
-        seq2 = str(refGenome.seq[(rI - (maxLength-j)):rI])
+		
+		seq1 = str(refGenome.seq[bP:(bP+j)])
+		seq2 = str(refGenome.seq[(rI - (maxLength-j)):rI])
 
-        count += 1
-        dI = seq1 + seq2
+		count += 1
+		dI = seq1 + seq2
 
 
-        print(type(dI))
-        rec = SeqRecord(
-    		Seq(dI,),
-    		id="test|test|gb|ABC123.4|ABC123_4",
-    		description="test DIPs",
+		print(type(dI))
+		rec = SeqRecord(
+			Seq(dI,),
+			id="test|test|gb|ABC123.4|ABC123_4",
+			description="test DIPs",
 		)	
 
-        reads.append(rec)
-        summary.append([count, bP, bP+j, (rI - (maxLength-j)), rI])
+		reads.append(rec)
+		summary.append([count, bP, bP+j, (rI - (maxLength-j)), rI])
 
 	SeqIO.write(reads, "/Users/janewalls/Documents/VS_CODE/MastersProjectDI/SimDITecINDEL.fasta", "fasta")
 	
