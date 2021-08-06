@@ -22,9 +22,9 @@ for refGenome in SeqIO.parse(fastaFile, "fasta"):
 
 	while count <= totalReads:
 		while True:
+			j = random.randint(1,maxLength)			
 			bP = random.randint(1,(lenGenome - maxLength))
-			rI = random.randint(1,lenGenome)
-			j = random.randint(j,maxLength)
+			rI = random.randint(j,lenGenome)
 			
 			if ((rI > bP + j) or (bP > rI + j)):
 				break
