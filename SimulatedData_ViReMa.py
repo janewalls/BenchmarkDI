@@ -80,4 +80,4 @@ def main(argv):
 		summaryFile.close()
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+	main(sys.argv[1:])
