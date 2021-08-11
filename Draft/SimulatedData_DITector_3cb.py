@@ -5,9 +5,10 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-# DITector - INDEL simulation code 
+# DITector - 3' copy back simulation code 
 
 def main(argv):
+
 
 	# Initialise adjustable parameters 
 	fastaFile = ""
@@ -15,7 +16,7 @@ def main(argv):
 	totalReads = 0
 	count = 0
 
-# Get options/paramaters 
+	# Get options/paramaters 
 	try:
 		opts, args = getopt.getopt(argv,"h:i:o:m:t:",["ifile=","odir=","mlen=", "tread="])
 	except getopt.GetoptError:
@@ -37,30 +38,33 @@ def main(argv):
 
 	#Initialising other
 	reads = []
-	readOutput = outputDir + "/SimulatedDITectorIndel.fasta"
-	summaryOutput = outputDir + "/SimulatedDITectorIndel.csv"
+	readOutput = outputDir + "/SimulatedDITector3cb.fasta"
+	summaryOutput = outputDir + "/SimulatedDITector3cb.csv"
 
 	summaryFile = open(summaryOutput, "w")
 
-	#Create Reads
+
+	# Create reads
 	for refGenome in SeqIO.parse(fastaFile, "fasta"):
 		lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
 
 		while count < totalReads:
 			while True:
-				frag1 = random.randint(1,maxLength)
-				frag2 = maxLength - frag1
+				j = random.randint(1,maxLength)
+				frag1 = int(j/2)
+				frag2 = maxLength - j
 				bP = random.randint(frag1,(lenGenome - frag2))
 				rI = random.randint(frag1,(lenGenome - frag2))
 				
 				if bP < rI:
 					break
 			
-			seq1 = str(refGenome.seq[(bP-frag1):bP])
-			seq2 = str(refGenome.seq[rI:(rI+frag2)])
+			seq1 = str(refGenome.seq[(bP-frag1):bP]) 
+			seq2 = str(refGenome.seq[rI:(rI+frag2)]) # Finds sequence
+			seq3 = str(refGenome.seq[rI:(rI+frag2)].reverse_complement()) # Then reverse compliment for 3'
 
 			count += 1
-			dI = seq1 + seq2
+			dI = seq2 + seq1 + seq3
 
 			rec = SeqRecord(
 				Seq(dI,),

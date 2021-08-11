@@ -49,21 +49,21 @@ def main(argv):
 
 		while count < totalReads:
 			while True:
-				frag1 = random.randint(1,maxLength)
-				frag2 = maxLength - frag1
+				j = random.randint(1,maxLength)
+				frag1 = int(j/2)
+				frag2 = maxLength - j
 				bP = random.randint(frag1,(lenGenome - frag2))
 				rI = random.randint(frag1,(lenGenome - frag2))
 				
 				if bP < rI:
 					break
 			
-			seq1 = refGenome.seq[(bP-frag1):bP]  # reverse compliment on 5' end
-			seq1 = str(seq1.reverse_complement())
+			seq1 = str(seq1.reverse_complement()) # reverse compliment on 5' end
 			seq2 = str(refGenome.seq[(bP-frag1):bP]) # Finds sequence
 			seq3 = str(refGenome.seq[rI:(rI+frag2)])
 
 			count += 1
-			dI = seq1 + seq2 + seq3
+			dI = seq1 + seq3 + seq2
 
 			rec = SeqRecord(
 				Seq(dI,),
