@@ -1,4 +1,4 @@
-import Bio, random
+import random
 
 from Bio.Seq import Seq
 from Bio import SeqIO
@@ -101,7 +101,7 @@ def INDEL(refGenome, outDir, maxLen, totalReads):
 	summaryFile.close()
 
 
-def CopyBack(refGenome, outDir, maxLen, totalReads):
+def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 	maxLen = int(maxLen)
 	totalReads = int(totalReads)
 
@@ -118,7 +118,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads):
 	assNo = refGenome.id
 
     # 5' Copy Backs (45% of total reads)
-	while count < int(totalReads*0.45):
+	while count < int(totalReads*cb5):
 		while True:
 			j = random.randint(1,maxLen)
 			frag1 = int(j/2)
@@ -147,7 +147,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads):
 		summaryFile.write(str(count) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\t" + str(bP) + "\t" + str(bP-frag1) + "\n") # Save summary info to file
 
     # 5' Snap back (5% of total reads)
-	while count < int(totalReads*0.5):
+	while count < int(totalReads*(sb5 +cb5)):
 		j = random.randint(1,maxLen)
 		frag = random.randint(1,(lenGenome - j))
 			
@@ -168,7 +168,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads):
 		summaryFile.write(str(count) + "\t" + str(frag) + "\t" + str(frag+j) + "\t" + str(frag+j) + "\t" + str(frag) + "\n") # Save summary info to file
 
     # 3' Copy back (45% of total reads)
-	while count < int(totalReads*0.95):
+	while count < int(totalReads*(cb3 +sb5+cb5)):
 		while True:
 			j = random.randint(1,maxLen)
 			frag1 = int(j/2)
@@ -226,7 +226,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads):
 
 
 
-def MultiSeg(records, outDir, maxLen, totalReads):
+def MultiSeg(records, outDir, maxLen, minLen, totalReads):
 	maxLen = int(maxLen)
 	totalReads = int(totalReads)
 
@@ -239,15 +239,19 @@ def MultiSeg(records, outDir, maxLen, totalReads):
 	count = 0
 
 	while count < totalReads:
-		ranSeg1 = random.randint(0,len(records)-1)
-		seg1 = records[ranSeg1]
+		while True:
+			ranSeg1 = random.randint(0,len(records)-1)
+			seg1 = records[ranSeg1]
 
-		bP = random.randint(0,600)
+			bP = random.randint(0,600)
 
-		ranSeg2 = random.randint(0,len(records)-1)
-		seg2 = records[ranSeg2]
+			ranSeg2 = random.randint(0,len(records)-1)
+			seg2 = records[ranSeg2]
 
-		rI = random.randint(len(seg2) - 600,len(seg2))
+			rI = random.randint(len(seg2) - 600,len(seg2))
+
+			if(bP + (len(seg2)-rI) >= minLen): # Ensures minimum threshold met
+				break
 
 
 		seq1 = str(seg1.seq[1:bP])
