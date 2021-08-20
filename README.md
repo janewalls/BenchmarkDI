@@ -1,5 +1,5 @@
 # DIG
-### -> **DI G**enerator
+### :star: *DI G*enerator
 
 A program to generate Defective Interfering particles with 4 different methods
 
@@ -35,18 +35,18 @@ Method | Description
 _Compulsory Flags:_
 Flag | Description
 -------|------------
-`-f` / `--file` | Input fasta file
-`-o` / `--outdir` | Output directory
-`-m` / `--max` | Maximum read length
-`-t` / `--total` | Total number of reads
+`-f` / `--file` | Input fasta file (string)
+`-o` / `--outdir` | Output directory (string)
+`-m` / `--max` | Maximum read length (int)
+`-t` / `--total` | Total number of reads (int)
 
 <br>
 
 _Method Specific Flags:_
 Flag | Description
 -------|------------
-`-cbr` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= 0.45,0.05,0.45,0.05)
-`-n` / `--min` | MultiSeg only - sets minimum read length (Default= 300 nt)
+`-cbr` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= 0.45,0.05,0.45,0.05) 
+`-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Default= 300)
 
 
 <br>
@@ -58,16 +58,16 @@ Flag | Description
 **Methods**:
 
 _ViReMa_
-<br>Lengths with break point and reintination point 
+<br>Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
 
 _INDEL_
-<br>Lengths with 
+<br>Lengths with break point and reintination point in a random point in the resulting read with all reads at a given whole read length.
 
 _Copyback_
-<br>Generates copy back reads from 3' and 5', can also include snapback
+<br>Generates copy back reads from 3' and 5', with a random segment in middle before copying back, also include snapback (no segment between reverse copied read) with all reads at a given whole read length.
 
 _MultiSeg_
-<br>Fragments occur
+<br>Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
 
 <br>
 
