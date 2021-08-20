@@ -32,22 +32,22 @@ def main(argv):
 		print("Fasta file needed!")
 
 	if args.out:
-		fragOutput = args.outdir
+		fragOutput = args.out
 	else:
 		print("Output fasta")
 
 	if args.num:
-		n = args.num
+		n = int(args.num)
 	else:
 		print("Number of fragments per read needed")
 	
 	if args.len:
-		l = args.len
+		l = int(args.len)
 	else:
 		print("Average read length")
 
 	if args.std:
-		s = args.std
+		s = int(args.std)
 	else:
 		print("Length standard deviation")
 

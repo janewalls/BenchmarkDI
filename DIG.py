@@ -1,5 +1,4 @@
-import argparse, sys, Simulate
-from os import error
+import argparse, sys, Generate
 from Bio import SeqIO
 
 def main(argv):
@@ -69,13 +68,13 @@ def main(argv):
 	if args.simMethod:
 		method = args.simMethod
 		if method == "ViReMa":
-			Simulate.ViReMa(refGenome, outputDir, maxLength, totalReads)
+			Generate.ViReMa(refGenome, outputDir, maxLength, totalReads)
 		if method == "INDEL":
-			Simulate.INDEL(refGenome, outputDir, maxLength, totalReads)
+			Generate.INDEL(refGenome, outputDir, maxLength, totalReads)
 		if method == "CopyBack":
-			Simulate.CopyBack(refGenome, outputDir, maxLength, totalReads, cb5, sb5, cb3)
+			Generate.CopyBack(refGenome, outputDir, maxLength, totalReads, cb5, sb5, cb3)
 		if method == "MultiSeg":
-			Simulate.MultiSeg(refGenome, outputDir, maxLength, minLength, totalReads)
+			Generate.MultiSeg(refGenome, outputDir, maxLength, minLength, totalReads)
 	else:
 		print("Must have method, either:\nViReMa\nINDEL\nCopyBack\nMultiSeg")
 
