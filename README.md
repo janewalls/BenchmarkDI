@@ -1,5 +1,5 @@
 # DIG
-### :star: *DI G*enerator
+### :dna: *DI G*enerator :petri_dish:
 
 A program to generate Defective Interfering particles with 4 different methods
 
