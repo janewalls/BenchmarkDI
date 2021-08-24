@@ -228,6 +228,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 def MultiSeg(records, outDir, maxLen, minLen, totalReads):
 	maxLen = int(maxLen)
+	i = int(maxLen/2)
 	totalReads = int(totalReads)
 
 	reads = []
@@ -243,12 +244,12 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads):
 			ranSeg1 = random.randint(0,len(records)-1)
 			seg1 = records[ranSeg1]
 
-			bP = random.randint(0,600)
+			bP = random.randint(0,i)
 
 			ranSeg2 = random.randint(0,len(records)-1)
 			seg2 = records[ranSeg2]
 
-			rI = random.randint(len(seg2) - 600,len(seg2))
+			rI = random.randint(len(seg2) - i,len(seg2))
 
 			if(bP + (len(seg2)-rI) >= minLen): # Ensures minimum threshold met
 				break

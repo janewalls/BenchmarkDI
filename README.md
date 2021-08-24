@@ -18,7 +18,7 @@ A program to generate Defective Interfering particles with 4 different methods
 
 **Usage**:
 ```
-python3 DIG.py SimulationMethod [options]
+DIG.py SimulationMethod [options]
 ```
 <br>
 

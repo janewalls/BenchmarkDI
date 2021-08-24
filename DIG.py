@@ -1,12 +1,14 @@
+#!/usr/bin/env python3
+
 import argparse, sys, Generate
 from Bio import SeqIO
 
 def main(argv):
 
-	parser = argparse.ArgumentParser()
+	parser = argparse.ArgumentParser(description='A program to generate Defective Interfering particles with 4 different methods')
 
 	# Positional 
-	parser.add_argument('simMethod', help='Method for simulation')
+	parser.add_argument('simMethod', help='Method for simulation; either ViReMa, INDEL, Copyback, MultiSeg')
 
 	# Flagged arguments
 	parser.add_argument('--file', '-f', required=True, help='Input fasta')
