@@ -16,7 +16,12 @@ def main(argv):
 	parser.add_argument('--max', '-m', required=True, help='Max read length')
 	parser.add_argument('--min', '-n', required=False, help='Min read length - for MultiSeg')
 	parser.add_argument('--total', '-t', required=True, help='Total reads')
-	parser.add_argument('--copybackratio', '-cbr', required=False, help='copyback ratio; 5 copyback, 5 snapback, 3 copyback, 3 snapback (*comma separated, must add up to 1)  - for Copyback')
+	parser.add_argument('--copybackratio', '-c', required=False, help='copyback ratio; 5 copyback, 5 snapback, 3 copyback, 3 snapback (*comma separated, must add up to 1)  - for Copyback')
+
+	parser.add_argument('--fragment', required=False, help='MultiSeg only - Fragment reads')
+	parser.add_argument('--num', '-x', required=False, help='MultiSeg only - Number of fragments, default = 100000')
+	parser.add_argument('--len', '-l', required=False, help='MultiSeg only - Average read length, default = 300')
+	parser.add_argument('--std', '-s', required=False, help='MultiSeg only - Length standard deviation, default = 50')
 
 	args = parser.parse_args()
 
@@ -64,6 +69,27 @@ def main(argv):
 		cb5 = 0.45
 		sb5 = 0.05
 		cb3 = 0.45
+
+	if args.fragment:
+		frag = True
+	else:
+		frag = False
+	
+	if args.num:
+		num = int(args.num)
+	else:
+		num = 100000
+	
+	if args.len:
+		len = int(args.len)
+	else:
+		len = 300
+
+	if args.std:
+		std = int(args.std)
+	else:
+		std = 50
+
 		
 
 	# Send to methods
@@ -76,7 +102,7 @@ def main(argv):
 		if method == "CopyBack":
 			Generate.CopyBack(refGenome, outputDir, maxLength, totalReads, cb5, sb5, cb3)
 		if method == "MultiSeg":
-			Generate.MultiSeg(refGenome, outputDir, maxLength, minLength, totalReads)
+			Generate.MultiSeg(refGenome, outputDir, maxLength, minLength, totalReads, frag, num, len, std)
 	else:
 		print("Must have method, either:\nViReMa\nINDEL\nCopyBack\nMultiSeg")
 

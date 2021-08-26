@@ -18,7 +18,7 @@ A program to generate Defective Interfering particles with 4 different methods
 
 **Usage**:
 ```
-DIG.py SimulationMethod [options]
+DIG.py <SimulationMethod> [options]
 ```
 <br>
 
@@ -45,8 +45,12 @@ Flag | Description
 _Method Specific Flags:_
 Flag | Description
 -------|------------
-`-cbr` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= 0.45,0.05,0.45,0.05) 
+`-c` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= 0.45,0.05,0.45,0.05) 
 `-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Default= 300)
+`--fragment` | MultiSeg only - Fragment reads, default = False
+`-x` / `--num` | MultiSeg only - Number of fragments, default = 100000
+`-l` / `--len` | MultiSeg only - Average read length, default = 300
+`-s` / `--std` | MultiSeg only - Length standard deviation, default = 50)
 
 
 <br>
@@ -59,15 +63,30 @@ Flag | Description
 
 _ViReMa_
 <br>Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
+<br>Example: `DIG.py ViReMa -f reference.fasta -o outputDirectory -m 180 -t 50`
 
 _INDEL_
 <br>Lengths with break point and reintination point in a random point in the resulting read with all reads at a given whole read length.
+<br>Example: `DIG.py INDEL -f reference.fasta -o outputDirectory -m 180 -t 50`
 
 _Copyback_
 <br>Generates copy back reads from 3' and 5', with a random segment in middle before copying back, also include snapback (no segment between reverse copied read) with all reads at a given whole read length.
+<br>Example: `DIG.py Copyback -f reference.fasta -o outputDirectory -m 180 -t 50`
 
 _MultiSeg_
 <br>Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
+<br>Example with fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 50`
+<br>Example without fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 50`
+
+<br>
+
+---
+
+**Output**:
+
+_Fasta files;_ <br>
+
+_Summary files;_ <br>Output in csv saved in output directory. Items saved as 
 
 <br>
 
@@ -79,5 +98,5 @@ _ViReMa method;_ <br>Routh, A. and Johnson, J.E., 2014. Discovery of functional 
 
 _INDEL method_ & _Copyback method;_  <br>Beauclair, G., Mura, M., Combredet, C., Tangy, F., Jouvenet, N. and Komarova, A.V., 2018. DI-tector: defective interfering viral genomes’ detector for next-generation sequencing data. RNA, 24(10), pp.1285-1296.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6140465/
 
-_MultiSeg method_ - <br>Alnaji, F.G., Holmes, J.R., Rendon, G., Vera, J.C., Fields, C.J., Martin, B.E. and Brooke, C.B., 2019. Sequencing framework for the sensitive detection and precise mapping of defective interfering particle-associated deletions across influenza A and B viruses. Journal of virology, 93(11), pp.e00354-19.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6532088/
+_MultiSeg method;_ <br>Alnaji, F.G., Holmes, J.R., Rendon, G., Vera, J.C., Fields, C.J., Martin, B.E. and Brooke, C.B., 2019. Sequencing framework for the sensitive detection and precise mapping of defective interfering particle-associated deletions across influenza A and B viruses. Journal of virology, 93(11), pp.e00354-19.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6532088/
 

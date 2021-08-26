@@ -226,7 +226,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 
 
-def MultiSeg(records, outDir, maxLen, minLen, totalReads):
+def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd):
 	maxLen = int(maxLen)
 	i = int(maxLen/2)
 	totalReads = int(totalReads)
@@ -239,12 +239,15 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads):
 
 	count = 0
 
+	#for fragment
+	bpList =[]
+
 	while count < totalReads:
 		while True:
 			ranSeg1 = random.randint(0,len(records)-1)
 			seg1 = records[ranSeg1]
 
-			bP = random.randint(0,i)
+			bP = random.randint(1,i)
 
 			ranSeg2 = random.randint(0,len(records)-1)
 			seg2 = records[ranSeg2]
@@ -255,7 +258,7 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads):
 				break
 
 
-		seq1 = str(seg1.seq[1:bP])
+		seq1 = str(seg1.seq[0:bP])
 		seq2 = str(seg2.seq[rI:len(seg2)])
 
 		count += 1
@@ -267,9 +270,61 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads):
 			description="seg" + str(ranSeg1+1) + ":1-" + str(bP) + "," + str(ranSeg2+1) + str(rI) + "-" + str(len(seg2)),
 		)	
 
+		bpList.append(bP)
+
 		reads.append(rec) # Adds new reads to list
 		summaryFile.write(str(count) + "\t" + str(ranSeg1+1) + "\t" + str(1) + "\t" + str(bP) + "\t" + str(ranSeg2+1) + "\t" + str(rI) + "\t" + str(len(seg2)) + "\n") # Save summary info to file
 
 	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
         
+	summaryFile.close()
+
+	if frag == True:
+		Fragment(readOutput, bpList, outDir, fnum, flen, fstd)
+
+
+
+def Fragment(fastaFile, bpList, outDir, num, len, std):
+	
+	fragOutput = outDir + "/fragmented.fasta"
+	summaryFile = outDir + "fragmented.csv"
+
+	records = list(SeqIO.parse(fastaFile, "fasta"))
+
+	n = int(num/len(records)) # finds number of fragments per read
+
+	fragments = []
+
+	rCount = 0 # read counter
+	fCount = 0 # fragment counter
+
+	for read in records:
+		bP = bpList[rCount]
+		rCount += 1
+		
+		# creates n number of fragments per read
+		for i in range(n): 
+			rln = random.randint(len-std,len+std) # random fragment length
+			while rln > len(read): 
+				rln = random.randint(len-std,len+std) # In case fragment size is > read length
+
+			pos = random.randint(0,(len(read)-rln)) #Finds start position for read
+			frag = str(read.seq[pos:(pos+rln)]) # Gets sequence
+
+			if (bP > pos) & (bP < (pos+rln)):
+				bPBool = True
+			else:
+				bPBool = False
+
+			rec = SeqRecord(
+				Seq(frag,),
+				id=str(read.id),
+				description=str(pos) + "-" + str(pos+rln),
+			)	
+
+			fragments.append(rec)
+			summaryFile.write(str(rCount) + "\t" + str(fCount) + "\t" + str(rln) + "\t" + str(bPBool) + "\n") # Save summary info to file (read #, fragment #, fragment length, bp boolean)
+
+	SeqIO.write(fragments, fragOutput, "fasta") # Save fragments to fasta file 
+
 	summaryFile.close()
