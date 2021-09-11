@@ -45,8 +45,8 @@ Flag | Description
 _Method Specific Flags:_
 Flag | Description
 -------|------------
-`-c` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= 0.45,0.05,0.45,0.05) 
-`-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Default= 300)
+`-c` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= t=0.45,0.05,0.45,0.05) 
+`-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Defaul 300)
 `--fragment` | MultiSeg only - Fragment reads, default = False
 `-x` / `--num` | MultiSeg only - Number of fragments, default = 100000
 `-l` / `--len` | MultiSeg only - Average read length, default = 300
@@ -63,20 +63,20 @@ Flag | Description
 
 _ViReMa_
 <br>Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
-<br>Example: `DIG.py ViReMa -f reference.fasta -o outputDirectory -m 180 -t 50`
+<br>Example: `DIG.py ViReMa -f reference.fasta -o outputDirectory -m 180 -t 100000`
 
 _INDEL_
 <br>Lengths with break point and reintination point in a random point in the resulting read with all reads at a given whole read length.
-<br>Example: `DIG.py INDEL -f reference.fasta -o outputDirectory -m 180 -t 50`
+<br>Example: `DIG.py INDEL -f reference.fasta -o outputDirectory -m 180 -t 100000`
 
 _Copyback_
 <br>Generates copy back reads from 3' and 5', with a random segment in middle before copying back, also include snapback (no segment between reverse copied read) with all reads at a given whole read length.
-<br>Example: `DIG.py Copyback -f reference.fasta -o outputDirectory -m 180 -t 50`
+<br>Example: `DIG.py Copyback -f reference.fasta -o outputDirectory -m 180 -t 100000 -c 0.45,0.05,0.45,0.05`
 
 _MultiSeg_
 <br>Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
-<br>Example with fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 50`
-<br>Example without fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 50`
+<br>Example with fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 1200 -t 1000 -n 300 -s 50 --fragment -x 100000 -l 300 -s 50`
+<br>Example without fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 100000 -n 300 -s 50`
 
 <br>
 
@@ -84,9 +84,11 @@ _MultiSeg_
 
 **Output**:
 
-_Fasta files;_ <br>
+_Fasta files;_ <br> Saved in output directory e.g. SimViReMa.fasta. Note: files will override if written in the same
 
-_Summary files;_ <br>Output in csv saved in output directory. Items saved as 
+_Summary files;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, start, bp, ri, end
+
+_Fragment Option;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, fragment #, fragment length, bp boolean
 
 <br>
 

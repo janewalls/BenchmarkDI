@@ -257,12 +257,11 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 			if(bP + (len(seg2)-rI) >= minLen): # Ensures minimum threshold met
 				break
 
-
-		seq1 = str(seg1.seq[0:bP])
+		seq1 = seg1.seq[0:bP]
 		seq2 = str(seg2.seq[rI:len(seg2)])
 
 		count += 1
-		dI = seq1 + seq2
+		dI = str(seq1) + seq2
 
 		rec = SeqRecord(
 			Seq(dI,),
@@ -284,14 +283,16 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 
 
 
-def Fragment(fastaFile, bpList, outDir, num, len, std):
+def Fragment(fastaFile, bpList, outDir, num, ln, std):
 	
 	fragOutput = outDir + "/fragmented.fasta"
-	summaryFile = outDir + "fragmented.csv"
+	summaryFile = outDir + "/fragmented.csv"
+
+	summaryFile = open(summaryFile, "w")	
 
 	records = list(SeqIO.parse(fastaFile, "fasta"))
 
-	n = int(num/len(records)) # finds number of fragments per read
+	n = int(len(records)/num) # finds number of fragments per read needed
 
 	fragments = []
 
@@ -304,13 +305,14 @@ def Fragment(fastaFile, bpList, outDir, num, len, std):
 		
 		# creates n number of fragments per read
 		for i in range(n): 
-			rln = random.randint(len-std,len+std) # random fragment length
+			rln = random.randint(ln-std,ln+std) # random fragment length
 			while rln > len(read): 
-				rln = random.randint(len-std,len+std) # In case fragment size is > read length
+				rln = random.randint(ln-std,ln+std) # In case fragment size is > read length
 
 			pos = random.randint(0,(len(read)-rln)) #Finds start position for read
 			frag = str(read.seq[pos:(pos+rln)]) # Gets sequence
 
+			# Whether or not fragment spans over breakpoint
 			if (bP > pos) & (bP < (pos+rln)):
 				bPBool = True
 			else:
