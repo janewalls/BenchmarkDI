@@ -80,6 +80,8 @@ _MultiSeg_
 
 <br>
 
+![DIG.py Diagrams](https://github.com/janewalls/DIG/blob/main/Images/DIG_diagrams.png?raw=true)
+
 ---
 
 **Output**:
@@ -89,6 +91,30 @@ _Fasta files;_ <br> Saved in output directory e.g. SimViReMa.fasta. Note: files 
 _Summary files;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, start, bp, ri, end
 
 _Fragment Option;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, fragment #, fragment length, bp boolean
+
+<br>
+
+---
+
+**Output Parser Program:**
+
+```
+OutParse.py [options]
+```
+
+<br>
+
+_Options:_
+Flag | Description
+-------|------------
+`-s` / `--sim` | Simulated data output csv file (string)
+`-d` / `--ditector` | Maximum read length (string)
+`-v` / `--virema` | Total number of reads (string)
+`-o` / `--outfile` | Output directory (string)
+`--std` | Standard deviation for matches (int)
+`-f` / `--fasta` | Simulated reads fasta file (string)
+
+
 
 <br>
 
