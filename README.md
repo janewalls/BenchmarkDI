@@ -23,8 +23,9 @@ DIG.py <SimulationMethod> [options]
 <br>
 
 _Simulation Methods:_
+
 Method | Description
--------|------------
+:----- | -----------:
 `ViReMa` | See below
 `INDEL` | See below
 `Copyback` | See below
@@ -33,8 +34,9 @@ Method | Description
 <br>
 
 _Compulsory Flags:_
+
 Flag | Description
--------|------------
+:--- | -----------:
 `-f` / `--file` | Input fasta file (string)
 `-o` / `--outdir` | Output directory (string)
 `-m` / `--max` | Maximum read length (int)
@@ -43,8 +45,9 @@ Flag | Description
 <br>
 
 _Method Specific Flags:_
+
 Flag | Description
--------|------------
+:--- | -----------:
 `-c` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= t=0.45,0.05,0.45,0.05) 
 `-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Defaul 300)
 `--fragment` | MultiSeg only - Fragment reads, default = False
@@ -104,7 +107,8 @@ OutParse.py [options]
 
 <br>
 
-_Options:_
+_Flag Options:_
+
 Flag | Description
 -------|------------
 `-s` / `--sim` | Simulated data output csv file (string)
