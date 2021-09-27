@@ -1,0 +1,12 @@
+Total sim reads	19145
+Total DITector Reads	61075
+Total ViReMa Reads	100000
+DITector Matched Reads	9854
+ViReMa Matched Reads	60596
+DITector UnMatched Reads	71
+ViReMa UnMatched Reads	320
+Total DIPs	90332
+DITector Matched DIPs	9854
+ViReMa Matched DIPs	60082
+DITector UnMatched DIPs	71
+ViReMa UnMatched DIPs	320

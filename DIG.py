@@ -9,17 +9,19 @@ def main(argv):
 	parser = argparse.ArgumentParser(description="A program to generate Defective Interfering particles with 4 different methods")
 
 	# Positional 
-	parser.add_argument("simMethod", help="Method for simulation; either ViReMa, INDEL, Copyback, MultiSeg")
+	parser.add_argument("simMethod", help="Method for simulation; either MBP, INDEL, Copyback, MultiSeg")
 
 	# Flagged arguments
 	parser.add_argument("-f", "--file", required=True, help="Input fasta")
 	parser.add_argument("-o", "--outdir", required=True, help="Output Directory")
 	parser.add_argument("-m", "--max", type=int, required=True, help="Max read length")
 	parser.add_argument("-t", "--total", type=int, required=True, help="Total reads")
-	
+
+	parser.add_argument("--tn", type=int, required=False, help="True Negatives read numbers (Can't use in MultiSeg")
 	parser.add_argument("-c", "--copybackratio", required=False, help="copyback ratio; 5 copyback, 5 snapback, 3 copyback, 3 snapback (*comma separated, must add up to 1)  - for Copyback")
 	parser.add_argument("--seg", type=int, required=False, help="For single segment use: fasta file number, only use if multisegment fasta file is input")
 	parser.add_argument("--min", "-n", type=int, required=False, help="Min read length - for MultiSeg")
+	parser.add_argument("--win", "-w", type=int, required=False, help="Window for reads - for MultiSeg2")
 	parser.add_argument("--fragment", action="store_true", required=False, help="MultiSeg only - Fragment reads")
 	parser.add_argument("-x", "--num", type=int, required=False, help="MultiSeg only - Number of fragments, default = 100000")
 	parser.add_argument("-l", "--len", type=int, required=False, help="MultiSeg only - Average read length, default = 300")
@@ -56,6 +58,7 @@ def main(argv):
 		totalReads = args.total
 	else:
 		print("Total number of reads")
+	
 
 	if args.copybackratio:
 		ratioList = args.copybackratio.split(",")
@@ -79,9 +82,14 @@ def main(argv):
 		print("DIPs produced from segment "+ refGenome.id)
 	else:
 		while type(refGenome) == list:
-			if args.simMethod == "MultiSeg":
+			if "MultiSeg" in args.simMethod:
 				break # Allows for multi segments for option
 			refGenome = refGenome[0]
+
+	if args.win:
+		window = args.win
+	else:
+		window = 0
 
 	if args.fragment:
 		frag = True
@@ -106,16 +114,20 @@ def main(argv):
 	# Send to methods
 	if args.simMethod:
 		method = args.simMethod
-		if method == "ViReMa":
-			Generate.ViReMa(refGenome, outputDir, maxLength, totalReads)
+		if method == "MBP":
+			Generate.MBP(refGenome, outputDir, maxLength, totalReads)
 		if method == "INDEL":
 			Generate.INDEL(refGenome, outputDir, maxLength, totalReads)
 		if method == "CopyBack":
 			Generate.CopyBack(refGenome, outputDir, maxLength, totalReads, cb5, sb5, cb3)
 		if method == "MultiSeg":
 			Generate.MultiSeg(refGenome, outputDir, maxLength, minLength, totalReads, frag, num, len, std)
+		if method == "MultiSeg2":
+			Generate.MultiSeg2(refGenome, outputDir, maxLength, window, totalReads)
+		if method == "NoDIP":
+			Generate.NoDIP(refGenome, outputDir, maxLength, totalReads)
 	else:
-		print("Must have method, either:\nViReMa\nINDEL\nCopyBack\nMultiSeg")
+		print("Must have method, either:\nMBP\nINDEL\nCopyBack\nMultiSeg\nMultiSeg2\nNoDIP")
 
 if __name__ == "__main__":
 	main(sys.argv[1:])

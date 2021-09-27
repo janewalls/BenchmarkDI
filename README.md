@@ -25,8 +25,8 @@ DIG.py <SimulationMethod> [options]
 _Simulation Methods:_
 
 Method | Description
-:----- | -----------:
-`ViReMa` | See below
+:----- | :-----------
+`MBP` | See below
 `INDEL` | See below
 `Copyback` | See below
 `MultiSeg` | See below
@@ -36,7 +36,7 @@ Method | Description
 _Compulsory Flags:_
 
 Flag | Description
-:--- | -----------:
+:--- | :-----------
 `-f` / `--file` | Input fasta file (string)
 `-o` / `--outdir` | Output directory (string)
 `-m` / `--max` | Maximum read length (int)
@@ -47,7 +47,7 @@ Flag | Description
 _Method Specific Flags:_
 
 Flag | Description
-:--- | -----------:
+:--- | :-----------
 `-c` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= t=0.45,0.05,0.45,0.05) 
 `-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Defaul 300)
 `--fragment` | MultiSeg only - Fragment reads, default = False
@@ -64,9 +64,9 @@ Flag | Description
 
 **Methods**:
 
-_ViReMa_
+_MBP_
 <br>Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
-<br>Example: `DIG.py ViReMa -f reference.fasta -o outputDirectory -m 180 -t 100000`
+<br>Example: `DIG.py MBP -f reference.fasta -o outputDirectory -m 180 -t 100000`
 
 _INDEL_
 <br>Lengths with break point and reintination point in a random point in the resulting read with all reads at a given whole read length.
@@ -89,7 +89,7 @@ _MultiSeg_
 
 **Output**:
 
-_Fasta files;_ <br> Saved in output directory e.g. SimViReMa.fasta. Note: files will override if written in the same
+_Fasta files;_ <br> Saved in output directory e.g. SimMBP.fasta. Note: files will override if written in the same
 
 _Summary files;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, start, bp, ri, end
 
@@ -101,6 +101,12 @@ _Fragment Option;_ <br>Output in csv saved in output directory. Items in csv sav
 
 **Output Parser Program:**
 
+<br>
+
+Program can be used to compare reads identified.
+
+<br>
+
 ```
 OutParse.py [options]
 ```
@@ -110,7 +116,7 @@ OutParse.py [options]
 _Flag Options:_
 
 Flag | Description
--------|------------
+:--- | :----------
 `-s` / `--sim` | Simulated data output csv file (string)
 `-d` / `--ditector` | Maximum read length (string)
 `-v` / `--virema` | Total number of reads (string)
@@ -118,6 +124,9 @@ Flag | Description
 `--std` | Standard deviation for matches (int)
 `-f` / `--fasta` | Simulated reads fasta file (string)
 
+<br>
+
+_Example:_
 
 
 <br>
@@ -126,7 +135,7 @@ Flag | Description
 
 **Source**:
 
-_ViReMa method;_ <br>Routh, A. and Johnson, J.E., 2014. Discovery of functional genomic motifs in viruses with ViReMa–a Virus Recombination Mapper–for analysis of next-generation sequencing data. Nucleic acids research, 42(2), pp.e11-e11.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3902915/
+_MBP method;_ <br>Routh, A. and Johnson, J.E., 2014. Discovery of functional genomic motifs in viruses with ViReMa–a Virus Recombination Mapper–for analysis of next-generation sequencing data. Nucleic acids research, 42(2), pp.e11-e11.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3902915/
 
 _INDEL method_ & _Copyback method;_  <br>Beauclair, G., Mura, M., Combredet, C., Tangy, F., Jouvenet, N. and Komarova, A.V., 2018. DI-tector: defective interfering viral genomes’ detector for next-generation sequencing data. RNA, 24(10), pp.1285-1296.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6140465/
 

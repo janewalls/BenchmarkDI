@@ -4,15 +4,17 @@ from Bio.Seq import Seq
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
-def ViReMa(refGenome, outDir, maxLen, totalReads):
+def MBP(refGenome, outDir, maxLen, totalReads):
 	maxLen = int(maxLen)
 	totalReads = int(totalReads)
     
 	reads = []
-	readOutput = outDir + "/SimViReMa.fasta"
-	summaryOutput = outDir + "/SimViReMa.csv"
+	readOutput = outDir + "/SimMBP.fasta"
+	summaryOutput = outDir + "/SimMBP.csv"
 
 	summaryFile = open(summaryOutput, "w")
+
+	summaryFile.write("Read #" + "\t" + "Seg#" + "\t" + "Start" + "\t" + "BP" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	n = int(maxLen/2)
 
@@ -20,13 +22,14 @@ def ViReMa(refGenome, outDir, maxLen, totalReads):
 
 	# Create reads
 
-	lenGenome = len(refGenome) - n # Get length of genome (# of nucleotides)
+	lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
 	assNo = refGenome.id
+	seg = assNo.split("seg")[1]
 
 	while count < totalReads:
 		while True:
-			pos1 = random.randint(0,lenGenome)
-			pos2 = random.randint(0,lenGenome)
+			pos1 = random.randint(0,(lenGenome - n))
+			pos2 = random.randint(0,(lenGenome - n))
 
 			if ((pos2 > pos1 + n) or (pos1 > pos2 + n)):
 				break
@@ -46,7 +49,7 @@ def ViReMa(refGenome, outDir, maxLen, totalReads):
 
 		reads.append(rec) # Adds new reads to list
 
-		summaryFile.write(str(count) + "\t" + str(pos1) + "\t" + str(pos1+n) + "\t" + str(pos2) + "\t" + str(pos2+n) + "\n") # Save summary info to file
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(pos1) + "\t" + str(pos1+n) + "\t" + str(pos2) + "\t" + str(pos2+n) + "\n") # Save summary info to file
 
 	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
     
@@ -56,19 +59,21 @@ def ViReMa(refGenome, outDir, maxLen, totalReads):
 def INDEL(refGenome, outDir, maxLen, totalReads):
 	maxLen = int(maxLen)
 	totalReads = int(totalReads)
-
  
 	reads = []
-	readOutput = outDir + "/SimDITectorIndel.fasta"
-	summaryOutput = outDir + "/SimDITectorIndel.csv"
+	readOutput = outDir + "/SimIndel.fasta"
+	summaryOutput = outDir + "/SimIndel.csv"
 
 	summaryFile = open(summaryOutput, "w")
+
+	summaryFile.write("Read #" + "\t" + "Seg#" + "\t" + "Start" + "\t" + "BP" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	count = 0
 
 	#Create Reads
 	lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
 	assNo = refGenome.id
+	seg = assNo.split("seg")[1]
 
 	while count < totalReads:
 		while True:
@@ -94,7 +99,7 @@ def INDEL(refGenome, outDir, maxLen, totalReads):
 
 			reads.append(rec) # Adds new reads to list
 
-			summaryFile.write(str(count) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\n") # Save summary info to file
+			summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\n") # Save summary info to file
 
 	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
 
@@ -107,15 +112,18 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 
 	reads = []
-	readOutput = outDir + "/SimDITectorCopyBack.fasta"
-	summaryOutput = outDir + "/SimDITectorCopyBack.csv"
+	readOutput = outDir + "/SimCopyBack.fasta"
+	summaryOutput = outDir + "/SimCopyBack.csv"
 
 	summaryFile = open(summaryOutput, "w")
+
+	summaryFile.write("Read #" + "\t" + "Seg#" + "\t" + "Start" + "\t" + "BP" + "\t" + "RI" + "\t" + "loop_end" + "\t" + "BP" + "\t" + "End" + "\n")
 
 	count = 0
     
 	lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
 	assNo = refGenome.id
+	seg = assNo.split("seg")[1]
 
     # 5' Copy Backs (45% of total reads)
 	while count < int(totalReads*cb5):
@@ -144,7 +152,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 		reads.append(rec) # Adds new reads to list
 
-		summaryFile.write(str(count) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\t" + str(bP) + "\t" + str(bP-frag1) + "\n") # Save summary info to file
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\t" + str(bP) + "\t" + str(bP-frag1) + "\n") # Save summary info to file
 
     # 5' Snap back (5% of total reads)
 	while count < int(totalReads*(sb5 +cb5)):
@@ -165,7 +173,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 		reads.append(rec) # Adds new reads to list
 
-		summaryFile.write(str(count) + "\t" + str(frag) + "\t" + str(frag+j) + "\t" + str(frag+j) + "\t" + str(frag) + "\n") # Save summary info to file
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(frag) + "\t" + str(frag+j) + "\t" + str(frag+j) + "\t" + str(frag) + "\t" + "-" + "\t" + "-" + "\n") # Save summary info to file
 
     # 3' Copy back (45% of total reads)
 	while count < int(totalReads*(cb3 +sb5+cb5)):
@@ -195,7 +203,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 		reads.append(rec) # Adds new reads to list
 
-		summaryFile.write(str(count) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI+frag2) + "\t" + str(rI) + "\n") # Save summary info to file
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(rI+frag2) + "\t" + str(rI) + "\n") # Save summary info to file
 
 
     # 3' Snap back (5% of total reads)
@@ -217,7 +225,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 
 		reads.append(rec) # Adds new reads to list
 
-		summaryFile.write(str(count) + "\t" + str(frag+j) + "\t" + str(frag) + "\t" + str(frag) + "\t" + str(frag+j) + "\n") # Save summary info to file
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(frag+j) + "\t" + str(frag) + "\t" + str(frag) + "\t" + str(frag+j) + "\t" + "-" + "\t" + "-" + "\n") # Save summary info to file
 
 
 	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
@@ -236,6 +244,8 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 	summaryOutput = outDir + "/SimMultiSeg.csv"
 
 	summaryFile = open(summaryOutput, "w")	
+
+	summaryFile.write("Read#" + "\t" + "Seg#"  + "\t" + "Start" + "\t" + "BP" + "\t" + "Seg#" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	count = 0
 
@@ -265,7 +275,7 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 
 		rec = SeqRecord(
 			Seq(dI,),
-			id=str(records[ranSeg1]),
+			id=str(seg1.id + "," + seg2.id),
 			description="seg" + str(ranSeg1+1) + ":1-" + str(bP) + "," + str(ranSeg2+1) + str(rI) + "-" + str(len(seg2)),
 		)	
 
@@ -273,6 +283,7 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 
 		reads.append(rec) # Adds new reads to list
 		summaryFile.write(str(count) + "\t" + str(ranSeg1+1) + "\t" + str(1) + "\t" + str(bP) + "\t" + str(ranSeg2+1) + "\t" + str(rI) + "\t" + str(len(seg2)) + "\n") # Save summary info to file
+
 
 	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
         
@@ -292,7 +303,7 @@ def Fragment(fastaFile, bpList, outDir, num, ln, std):
 
 	records = list(SeqIO.parse(fastaFile, "fasta"))
 
-	n = int(len(records)/num) # finds number of fragments per read needed
+	n = int(num/len(records)) # finds number of fragments per read needed
 
 	fragments = []
 
@@ -323,6 +334,7 @@ def Fragment(fastaFile, bpList, outDir, num, ln, std):
 				id=str(read.id),
 				description=str(pos) + "-" + str(pos+rln),
 			)	
+			fCount += 1
 
 			fragments.append(rec)
 			summaryFile.write(str(rCount) + "\t" + str(fCount) + "\t" + str(rln) + "\t" + str(bPBool) + "\n") # Save summary info to file (read #, fragment #, fragment length, bp boolean)
@@ -330,3 +342,99 @@ def Fragment(fastaFile, bpList, outDir, num, ln, std):
 	SeqIO.write(fragments, fragOutput, "fasta") # Save fragments to fasta file 
 
 	summaryFile.close()
+
+
+def MultiSeg2(records, outDir, maxLen, window, totalReads):
+	maxLen = int(maxLen)
+	totalReads = int(totalReads)
+
+ 
+	reads = []
+	readOutput = outDir + "/SimMultiSeg2.fasta"
+	summaryOutput = outDir + "/SimMultiSeg2.csv"
+
+	summaryFile = open(summaryOutput, "w")
+
+	summaryFile.write("Read#" + "\t" + "Seg#"  + "\t" + "Start" + "\t" + "BP" + "\t" + "Seg#" + "\t" + "RI" + "\t" + "End" + "\n")
+
+	count = 0
+
+
+	while count < totalReads:
+		while True:
+			ranSeg1 = random.randint(0,len(records)-1)
+			seg1 = records[ranSeg1]
+			ranSeg2 = random.randint(0,len(records)-1)
+			seg2 = records[ranSeg2]
+
+			frag1 = random.randint(1,maxLen)
+			frag2 = maxLen - frag1
+
+			if window == 0:
+				bP = random.randint(frag1,(len(seg1) - frag2))
+				rI = random.randint(frag1,(len(seg2) - frag2))
+			else:
+				bP = random.randint(frag1,window)
+				rI = random.randint((len(seg2)-window),(len(seg2)-frag2))
+
+			if (ranSeg1 == ranSeg2 and bP > rI):
+				break
+			
+			seq1 = seg1.seq[(bP-frag1):bP]
+			seq2 = seg2.seq[rI:(rI+frag2)]
+
+			count += 1
+			dI = str(seq1) + str(seq2)
+
+			rec = SeqRecord(
+				Seq(dI,),
+				id=str(seg1.id + "," + seg2.id),
+				description=str(ranSeg1) + str(bP-frag1) + "-" + str(bP) + "," + str(ranSeg2) + str(rI) + "-" + str(rI+frag2),
+			)	
+
+			reads.append(rec) # Adds new reads to list
+
+			summaryFile.write(str(count) + "\t" + str(ranSeg1) + "\t" + str(bP-frag1) + "\t" + str(bP) + "\t" + str(ranSeg2) + "\t" + str(rI) + "\t" + str(rI+frag2) + "\n") # Save summary info to file
+
+	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
+
+	summaryFile.close()
+
+
+def NoDIP(refGenome, outDir, maxLen, totalReads):
+
+	maxLen = int(maxLen)
+	totalReads = int(totalReads)
+
+	lenGenome = len(refGenome) # Get length of genome (# of nucleotides)
+	assNo = refGenome.id
+	seg = assNo.split("seg")[1]
+
+	reads = []
+	readOutput = outDir + "/SimNoDIP.fasta"
+	summaryOutput = outDir + "/SimNoDIP.csv"
+
+	summaryFile = open(summaryOutput, "w")
+	summaryFile.write("Read#" "\t" + "Seg#" + "\t" + "Start" + "\t" + "End" + "\n")
+
+	count = 0
+
+	while count < totalReads:
+		count += 1
+		start = random.randint(0,(lenGenome - maxLen))
+		seq = str(refGenome.seq[start:(start+maxLen)])
+		
+		rec = SeqRecord(
+			Seq(seq,),
+			id=assNo,
+			description=str(start) + "-" + str(start+maxLen),
+		)
+
+		reads.append(rec) # Adds new reads to list
+
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(start) + "\t" + str(start+maxLen) + "\n") # Save summary info to file
+	
+	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file
+	
+	summaryFile.close()
+
