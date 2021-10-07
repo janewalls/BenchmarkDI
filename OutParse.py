@@ -3,34 +3,38 @@
 import argparse, sys
 
 
-#/Users/janewalls/Documents/VS_CODE/MastersProjectDI/BenchmarkDI/BenchmarkDI/OutParse.py -s "/Users/janewalls/OneDrive - University of Glasgow/Project/testParser/test1.csv" -d "/Users/janewalls/Documents/DI-tector_output_sorted.txt" -v "/Users/janewalls/Documents/Virus_Recombination_Results.txt" -o "/Users/janewalls/Documents" --std 2
-
-
+ 
 
 def main(argv):
 	
 	parser = argparse.ArgumentParser(description="A program to generate Defective Interfering particles with 4 different methods")
 
-	parser.add_argument("-s", "--sim", required=False, help="Simualated data")
 	parser.add_argument("-d", "--ditector", required=True, help="DI-Tector output file: DI-tector_output_sorted.txt")
 	parser.add_argument("-v", "--virema", required=True, help="ViReMa output file: Virus_Recombination_Results.txt")
 	parser.add_argument("-o", "--outdir", required=True, help="Output Directory")
+	parser.add_argument("-s", "--sim", required=False, help="Simualated data")
 	parser.add_argument("-f", "--fasta", required=False, help="Simulated reads fasta file")
+	parser.add_argument("--keep", required=False, help="Keep DIPs where tools say BP and RI are the same in ViReMa, default off")
 	parser.add_argument("--std", required=False, type=int, help="Standard Deviation")
-	parser.add_argument("--cut", required=False, type=int, help="Cut off if want to remove DIPs that have low occurances")	
+	parser.add_argument("--cut", required=False, type=int, help="Cut off if want to remove DIPs that have low occurances, default = 0")	
 
 	args = parser.parse_args()
 
 	dataDict = {} # Initiate nested dictionary
 
 	totalList = []
+	
+	if args.keep:
+		keep = True
+	else:
+		keep = False
 
 	if args.ditector:
 		outDIT = args.ditector
 		ditParse(dataDict, outDIT, totalList)
 	if args.virema:
 		outVir = args.virema
-		virParse(dataDict, outVir, totalList)
+		virParse(dataDict, outVir, totalList, keep)
 	if args.std:
 		std = args.std
 	else:
@@ -50,7 +54,6 @@ def main(argv):
 	if args.sim:
 		actual = args.sim
 		simParse(dataDict, actual, totalList)
-
 		compile(parsed_out, dataDict, std, fasta, totalList)
 	else:
 		compare(parsed_out, dataDict, std, cutOff, totalList)
@@ -122,8 +125,8 @@ def ditParse(dataDict, outDIT, totalList): # Parses DI-tector output
 		segB = int(lineList[9].split("seg")[1])
 
 		totCount += 1
-		if (bp,ri) in ditDict:
-			ditDict[(segA, bp, segB, ri)] +=1 # Will need to be different for Copyback, and fragment -- can either have first line of csv to show method, adjust so all are the same, or put flag
+		if (segA, bp, segB, ri) in ditDict:
+			ditDict[(segA, bp, segB, ri)] += 1 
 		else:
 			ditDict[(segA, bp, segB, ri)] = 1 
 
@@ -131,7 +134,7 @@ def ditParse(dataDict, outDIT, totalList): # Parses DI-tector output
 	totalList.append(["ditDict", totCount])
 
 
-def virParse(dataDict, outVir, totalList): # Parses DI-tector output
+def virParse(dataDict, outVir, totalList, keep): # Parses ViReMa output
 	virDict = {}
 	outVir = open(outVir, "r")
 
@@ -155,7 +158,7 @@ def virParse(dataDict, outVir, totalList): # Parses DI-tector output
 				segB = int(lineList[2].split("seg")[1])
 				#if len(lineList) == 3:
 					#segB += "R"
-					#print()
+
 		#Extract DIPs	
 		else:
 			lineList = line.split("\t")
@@ -164,6 +167,8 @@ def virParse(dataDict, outVir, totalList): # Parses DI-tector output
 				item = i.split("_")
 				bp = int(item[0])
 				ri = int(item[2])
+				if keep == False and segA == segB and bp == ri:
+					continue # Ensures DIPs found in virema that have identical bp and ri positions will be removed
 				virDict[(segA, bp, segB, ri)] = int(item[4])
 				totCount += int(item[4])
 
@@ -174,7 +179,7 @@ def virParse(dataDict, outVir, totalList): # Parses DI-tector output
 def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongside simulated reads
 
 	output = open((outputPath + "/parser_output.csv"), "w")
-	output.write("Simulated Read (seg#,bp,seg#,ri)" + "\t" + "Simulated count" + "\t" + "DI-Tector count" + "\t" + "ViReMa count" + "\n" )
+	output.write("BP_seg" + "\t" + "BP" + "\t" + "RI_seg" + "\t" + "RI" + "\t" + "Sim_Count" + "\t" + "DITector_count" + "\t" + "ViReMa_count" + "\n")
 	
 	simDict = dataDict["simDict"]
 	ditDict = dataDict["ditDict"]	
@@ -194,14 +199,14 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 		ditCount = 0
 		virCount = 0
 
-		filtDict= {k: v for k, v in virDict.items() if (k[0]+sd >= key[0] and k[0]-sd <= key[0]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1])}
+		filtDict= {k: v for k, v in virDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			virCount += filtDict[x]
 			virTotMatch += filtDict[x]
 			virDipMatch +=1
 			del virDict[x] # Same as above
 		
-		filtDict= {k: v for k, v in ditDict.items() if (k[0]+sd >= key[0] and k[0]-sd <= key[0]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1])}
+		filtDict= {k: v for k, v in ditDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			ditCount += filtDict[x]
 			ditTotMatch += filtDict[x]
@@ -209,7 +214,7 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 			del ditDict[x]  # items will only be counted once if sd > 0, and will be counted under first shown
 
 
-		outString = str(key) + "\t" + str(simDict[key]) + "\t" + str(ditCount) + "\t" + str(virCount) + "\n"
+		outString = str(key[0]) + "\t" + str(key[1]) + "\t" + str(key[2]) + "\t" + str(key[3]) + "\t" + str(simDict[key]) + "\t" + str(ditCount) + "\t" + str(virCount) + "\n"
 		output.write(outString)
 
 		if ditCount == 0 and virCount == 0:
@@ -269,7 +274,7 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongside simulated reads
 
 	output = open((outputPath + "/parser_output.csv"), "w")
-	output.write("Read (seg#,bp,seg#,ri)" + "\t" + "DI-Tector count" + "\t" + "ViReMa count" + "\n")
+	output.write("BP_seg" + "\t" + "BP" + "\t" + "RI_seg" + "\t" + "RI" + "\t" + "DITector_count" + "\t" + "ViReMa_count" + "\n")
 	
 	ditDict = dataDict["ditDict"]	
 	virDict = dataDict["virDict"]
@@ -280,22 +285,22 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongs
 	totMatch = 0
 	dipMatch = 0
 
-	delDict = {}
+	delList = []
 
-	for key in  ditDict.keys():
+	for key in ditDict.keys():
 		virCount = 0
-		filtDict= {k: v for k, v in virDict.items() if (k[0]+sd >= key[0] and k[0]-sd <= key[0]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1])}
+		filtDict= {k: v for k, v in virDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			virCount += filtDict[x]
 			totMatch += filtDict[x]
 			dipMatch +=1
 			del virDict[x] # Same as above
 		if virCount > cutOff or ditDict[key] > cutOff:
-			outString = str(key) + "\t" + str(ditDict[key]) + "\t" + str(ditDict[key]) + "\t" + str(virCount) + "\n"
+			outString = str(key[0]) + "\t" + str(key[1]) + "\t" + str(key[2]) + "\t" + str(key[3]) + "\t" + str(ditDict[key]) + "\t" + str(virCount) + "\n"
 			output.write(outString)
-		delDict[key] = ditDict[key]
+		delList.append(key)
 	
-	for key in delDict:
+	for key in delList:
 		del ditDict[key]
 
 	virUnct = 0	
@@ -303,6 +308,11 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongs
 	for x in virDict:
 		virUnct += virDict[x]
 		virDipUnct += 1
+		if cutOff == 0:
+			outString = str(x[0]) + "\t" + str(x[1]) + "\t" + str(x[2]) + "\t" + str(x[3]) + "\t" + str(0) + "\t" + str(virDict[x]) + "\n"
+			output.write(outString)
+
+	output.close()
 
 	ditUnct = 0
 	ditDipUnct = 0
@@ -325,8 +335,11 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongs
 	unDipDit = "DITector UnMatched DIPs" + "\t" + str(ditDipUnct) + "\n"
 	unDipVir = "ViReMa UnMatched DIPs" + "\t" + str(virDipUnct)
 
-	summaryFile.write(totDit + totVir + totDipDit + totDipVir + totDipVir + mat + unDit + unVir + matDip + unDipDit + unDipVir)
+	summaryFile.write(totDit + totVir + totDipDit + totDipVir + mat + unDit + unVir + matDip + unDipDit + unDipVir)
 	summaryFile.close()
+
+	print("\nAction Complete, File Saved\n")
+	
 
 if __name__ == "__main__":
 	main(sys.argv[1:]) 

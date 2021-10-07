@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse, sys, Generate
-import re
 from Bio import SeqIO
 
 def main(argv):

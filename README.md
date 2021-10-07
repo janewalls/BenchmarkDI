@@ -16,6 +16,13 @@ A program to generate Defective Interfering particles with 4 different methods
 
 ---
 
+**Installation**:
+<br>Ensure command is excecutable using chmod
+
+<br>
+
+---
+
 **Usage**:
 ```
 DIG.py <SimulationMethod> [options]
@@ -30,6 +37,9 @@ Method | Description
 `INDEL` | See below
 `Copyback` | See below
 `MultiSeg` | See below
+`MultiSeg2` | See below
+`NoDIP` | See below
+
 
 <br>
 
@@ -81,6 +91,15 @@ _MultiSeg_
 <br>Example with fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 1200 -t 1000 -n 300 -s 50 --fragment -x 100000 -l 300 -s 50`
 <br>Example without fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 100000 -n 300 -s 50`
 
+_MultiSeg2_
+<br>Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
+<br>Example: `DIG.py MultiSeg2 -f reference.fasta -o outputDirectory -m 150 -t 100000`
+
+_NoDIP_
+<br>Lengths created as just fragments of an existing genomes, i.e. reads with no dips.
+<br>Example: `DIG.py NoDIP -f reference.fasta -o outputDirectory -m 150 -t 100000`
+
+
 <br>
 
 ![DIG.py Diagrams](https://github.com/janewalls/DIG/blob/main/Images/DIG_diagrams.png?raw=true)
@@ -93,7 +112,7 @@ _Fasta files;_ <br> Saved in output directory e.g. SimMBP.fasta. Note: files wil
 
 _Summary files;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, start, bp, ri, end
 
-_Fragment Option;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, fragment #, fragment length, bp boolean
+_Fragment Option;_ <br>(MultiSeg method only)Output in csv saved in output directory. Items in csv saved as: read #, fragment #, fragment length, bp boolean
 
 <br>
 
@@ -113,6 +132,12 @@ OutParse.py [options]
 
 <br>
 
+_Description:_
+
+Used to compare outputs, has 2 usages, to compare outputs between simulations as created from DIG.py
+
+<br>
+
 _Flag Options:_
 
 Flag | Description
@@ -127,6 +152,15 @@ Flag | Description
 <br>
 
 _Example:_
+
+`OutParse.py -s simData -o outputDirectory -m 180 -t 100000 -n 300 -s 50`
+
+<br>
+
+---
+
+**Example Bash Scripts:**
+
 
 
 <br>
