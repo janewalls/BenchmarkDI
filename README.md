@@ -17,21 +17,21 @@ There were 4 programs created:
 
 - [Requirements](#Requirements)
 - [Installation](#Installation)
-- [DIG](#DIG%20-%20Simululate%20data)
+- [DIG](#DIG---Simululate-data)
     - Usage
     - Methods
     - Output
     - Example
-- [OutParse](#OutParse%20-%20Compile%20tool%20outputs)
+- [OutParse](#OutParse---Compile-tool-outputs)
     - Usage
     - Example
-- [CompDIP](#CompDIP%20-%20Tool%20to%20compile%20sample%20outputs)
+- [CompDIP](#CompDIP---Tool-to-compile-sample-outputs)
     - Usage
     - Example
-- [ditToBed](#ditToBed%20-%20DI-Tector%20output%20to%20Bed%20file)
+- [ditToBed](#ditToBed---DITector-output-to-Bed-file)
     - Usage
     - Example
-- [Example Bash Scripts](#Example%20Bash%20Scripts)
+- [Example Bash Scripts](#Example-Bash-Scripts)
 - [References](#References)
 
 <br>
@@ -262,7 +262,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## ditToBed - DI-Tector output to Bed file:
+## ditToBed - DITector output to Bed file:
 
 <br>
 
