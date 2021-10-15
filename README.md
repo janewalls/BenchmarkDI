@@ -5,10 +5,10 @@ A program to generate Defective Interfering particles with 4 different methods, 
 <br>
 
 There were 4 programs created:
-- DIG = Simulate Defective Particles
-- OutParse = Compare DIPs found between tools, and if present simulated DIPs
-- CompDIP = compile and compare DIPs in samples, and tools
-- ditToBed = Create bed file from DI-Tector output
+- DIG.py = Simulate Defective Particles
+- OutParse.py = Compare DIPs found between tools, and if present simulated DIPs
+- CompDIP.py = compile and compare DIPs in samples, and tools
+- ditToBed.py = Create bed file from DI-Tector output
 
 
 <br>
@@ -17,18 +17,20 @@ There were 4 programs created:
 
 - [Requirements](#Requirements)
 - [Installation](#Installation)
-- [DIG.py](#DIG.py)
+- [DIG](#DIG)
     - Usage
     - Methods
     - Output
     - Example
-- [Outparse.py](#Outparse.py)
+- [Outparse](#Outparse)
     - Usage
-    - 
-- [CompDIP.py](#CompDIP.py)
+    - Example
+- [CompDIP](#CompDIP)
     - Usage
-- [DitToBed.py](#DitToBed.py)
+    - Example
+- [DitToBed](#DitToBed)
     - Usage
+    - Example
 
 <br>
 
@@ -59,7 +61,7 @@ chmod 555 DIG.py OutParse.py CompDIP.py ditToBed.py
 <br>
 <br>
 
-## DIG.py 
+## DIG - Simululate data 
 
 <br>
 
@@ -161,8 +163,8 @@ _Copyback_
 <br>`DIG.py Copyback -f reference.fasta -o outputDirectory -m 180 -t 100000 -c 0.45,0.05,0.45,0.05`
 
 _MultiSeg_
-<br>With fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 1200 -t 1000 -n 300 -s 50 --fragment -x 100000 -l 300 -s 50`
-<br>Without fragmentation: `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 100000 -n 300 -s 50`
+<br>With fragmentation:<br> `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 1200 -t 1000 -n 300 -s 50 --fragment -x 100000 -l 300 -s 50`
+<br>Without fragmentation:<br> `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 100000 -n 300 -s 50`
 
 _MultiSeg2_
 <br>`DIG.py MultiSeg2 -f reference.fasta -o outputDirectory -m 150 -t 100000`
@@ -187,7 +189,7 @@ _Fragment Option;_ <br>(MultiSeg method only)Output in csv saved in output direc
 <br>
 <br>
 
-## Outparse.py
+## Outparse  - Compile tool outputs
 
 <br>
 
@@ -226,7 +228,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## CompDIP.py
+## CompDIP - Tool to compile sample outputs
 
 <br>
 
@@ -258,7 +260,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## ditToBed.py
+## ditToBed -  DI-Tector output to Bed file
 
 <br>
 
