@@ -8,7 +8,16 @@ A program to generate Defective Interfering particles with 4 different methods
 
 ---
 
-**Requirements**:
+## Table of Contents:
+
+- [Requirements](#Requirements)
+- [Installation](#Installation)
+
+<br>
+
+---
+
+### Requirements:
 <br>Python 3.0+ 
 <br>BioPython
 
@@ -16,14 +25,27 @@ A program to generate Defective Interfering particles with 4 different methods
 
 ---
 
-**Installation**:
-<br>Ensure command is excecutable using chmod
+### Installation:
+<br>
+```
+git clone https://github.com/janewalls/DIG.git
+```
 
+Ensure commands are executable: 
+
+```
+chmod 555 DIG.py OutParse.py CompDIP.py ditToBed.py
+```
+<br>
+<br>
 <br>
 
----
+## DIG.py - Simulate Defective Particles
 
-**Usage**:
+---
+<br>
+
+### Usage:
 ```
 DIG.py <SimulationMethod> [options]
 ```
@@ -70,9 +92,10 @@ Flag | Description
 
 
 ---
+<br>
 
-
-**Methods**:
+### Methods:
+<br>
 
 _MBP_
 <br>Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
@@ -105,9 +128,10 @@ _NoDIP_
 ![DIG.py Diagrams](https://github.com/janewalls/DIG/blob/main/Images/DIG_diagrams.png?raw=true)
 
 ---
+<br>
 
-**Output**:
-
+### Output:
+<br>
 _Fasta files;_ <br> Saved in output directory e.g. SimMBP.fasta. Note: files will override if written in the same
 
 _Summary files;_ <br>Output in csv saved in output directory. Items in csv saved as: read #, start, bp, ri, end
@@ -115,10 +139,10 @@ _Summary files;_ <br>Output in csv saved in output directory. Items in csv saved
 _Fragment Option;_ <br>(MultiSeg method only)Output in csv saved in output directory. Items in csv saved as: read #, fragment #, fragment length, bp boolean
 
 <br>
+<br>
+<br>
 
----
-
-**Output Parser Program:**
+## Outparse.py - Output Parser Program
 
 <br>
 
@@ -160,8 +184,9 @@ _Example:_
 ---
 
 **Example Bash Scripts:**
+<br>
 
-
+See Example_BashScripts folder in GitHub
 
 <br>
 
