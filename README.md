@@ -17,20 +17,21 @@ There were 4 programs created:
 
 - [Requirements](#Requirements)
 - [Installation](#Installation)
-- [DIG](#DIG)
+- [DIG](#DIG - Simululate data)
     - Usage
     - Methods
     - Output
     - Example
-- [Outparse](#Outparse)
+- [OutParse](#OutParse)
     - Usage
     - Example
-- [CompDIP](#CompDIP)
+- [CompDIP](#CompDIP - Tool to compile sample outputs)
     - Usage
     - Example
-- [DitToBed](#DitToBed)
+- [DitToBed](#ditToBed -  DI-Tector output to Bed file)
     - Usage
     - Example
+- [References](#References)
 
 <br>
 
