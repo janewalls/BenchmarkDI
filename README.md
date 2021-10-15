@@ -59,7 +59,11 @@ chmod 555 DIG.py OutParse.py CompDIP.py ditToBed.py
 <br>
 <br>
 
-## DIG.py - Simulate Defective Particles
+## DIG.py 
+
+<br>
+
+Simulate defective particles 
 
 <br>
 
@@ -69,7 +73,7 @@ DIG.py <SimulationMethod> [options]
 ```
 <br>
 
-_Simulation Methods:_
+*_Simulation Methods:_*
 
 Method | Description
 :----- | :-----------
@@ -83,7 +87,7 @@ Method | Description
 
 <br>
 
-_Compulsory Flags:_
+*_Compulsory Flags:_*
 
 Flag | Description | Type | Required
 :--- | :---------- | :--- | --------:
@@ -94,7 +98,7 @@ Flag | Description | Type | Required
 
 <br>
 
-_Method Specific Flags:_
+*_Method Specific Flags:_*
 
 Flag | Description | Type | Required
 :--- | :---------- | :--- | --------:
@@ -183,7 +187,7 @@ _Fragment Option;_ <br>(MultiSeg method only)Output in csv saved in output direc
 <br>
 <br>
 
-## Outparse.py - Output Parser Program
+## Outparse.py
 
 <br>
 
@@ -201,7 +205,7 @@ OutParse.py [options]
 
 
 
-_Flag Options:_
+*_Flag Options:_*
 
 Flag | Description | Type | Required
 :--- | :---------- | :--- | --------:
@@ -222,7 +226,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## CompDIP.py - Output Parser Program
+## CompDIP.py
 
 <br>
 
@@ -254,7 +258,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## DitToBed.py - Output Parser Program
+## ditToBed.py
 
 <br>
 
@@ -265,7 +269,7 @@ Program to
 ### Usage:
 
 ```
-CompDIP.py -d <Directory>
+ditToBed.py -d <Directory>
 ```
 <br>
 
