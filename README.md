@@ -17,20 +17,21 @@ There were 4 programs created:
 
 - [Requirements](#Requirements)
 - [Installation](#Installation)
-- [DIG](#DIG - Simululate data)
+- [DIG](#DIG%20-%20Simululate%20data)
     - Usage
     - Methods
     - Output
     - Example
-- [OutParse](#OutParse)
+- [OutParse](#OutParse%20-%20Compile%20tool%20outputs)
     - Usage
     - Example
-- [CompDIP](#CompDIP - Tool to compile sample outputs)
+- [CompDIP](#CompDIP%20-%20Tool%20to%20compile%20sample%20outputs)
     - Usage
     - Example
-- [DitToBed](#ditToBed -  DI-Tector output to Bed file)
+- [ditToBed](#ditToBed%20-%20DI-Tector%20output%20to%20Bed%20file)
     - Usage
     - Example
+- [Example Bash Scripts](#Example%20Bash%20Scripts)
 - [References](#References)
 
 <br>
@@ -62,7 +63,7 @@ chmod 555 DIG.py OutParse.py CompDIP.py ditToBed.py
 <br>
 <br>
 
-## DIG - Simululate data 
+## DIG - Simululate data:
 
 <br>
 
@@ -190,7 +191,7 @@ _Fragment Option;_ <br>(MultiSeg method only)Output in csv saved in output direc
 <br>
 <br>
 
-## Outparse  - Compile tool outputs
+## Outparse - Compile tool outputs:
 
 <br>
 
@@ -229,7 +230,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## CompDIP - Tool to compile sample outputs
+## CompDIP - Tool to compile sample outputs:
 
 <br>
 
@@ -261,7 +262,7 @@ Flag | Description | Type | Required
 <br>
 <br>
 
-## ditToBed -  DI-Tector output to Bed file
+## ditToBed - DI-Tector output to Bed file:
 
 <br>
 
@@ -290,7 +291,7 @@ Flag | Description | Type | Required
 ### Example Bash Scripts:
 <br>
 
-See [Example_BashScripts](/janewalls/DIG/Example_BashScripts) folder in GitHub
+See Example_BashScripts folder [here](https://github.com/janewalls/DIG/tree/main/Example_BashScripts)
 
 <br>
 
