@@ -67,7 +67,7 @@ chmod 555 DIG.py OutParse.py CompDIP.py ditToBed.py
 
 <br>
 
-Simulate defective particles 
+Simulate defective interfering particles 
 
 <br>
 
@@ -81,12 +81,12 @@ DIG.py <SimulationMethod> [options]
 
 Method | Description
 :----- | :-----------
-`MBP` | See below
-`INDEL` | See below
-`Copyback` | See below
-`MultiSeg` | See below
-`MultiSeg2` | See below
-`NoDIP` | See below
+`MBP` | [See below](#MBP)
+`INDEL` | [See below](#INDEL)
+`Copyback` | [See below](#Copyback)
+`MultiSeg` | [See below](#MultiSeg)
+`MultiSeg2` | [See below](#MultiSeg2)
+`NoDIP` | [See below](#NoDIP)
 
 
 <br>
@@ -106,12 +106,14 @@ Flag | Description | Type | Required
 
 Flag | Description | Type | Required
 :--- | :---------- | :--- | --------:
+`--seg` | All but MultiSeg/2 - Chosen segment if fasta file contains >1 (Default = 1) | `int` | No
 `-c` / `--copybackratio` | Copyback only - sets ratio for 5' copyback, 5' snapback, 3' copyback, and 3' snapback DIPs (Default= 0.45,0.05,0.45,0.05)  | `String` | No
-`-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Defaul 300) | `int` | No
-`--fragment` | MultiSeg only - Fragment reads, default = False  | - | No
-`-x` / `--num` | MultiSeg only - Number of fragments, default = 100000 | `int` | No
-`-l` / `--len` | MultiSeg only - Average read length, default = 300 | `int` | No
-`-s` / `--std` | MultiSeg only - Length standard deviation, default = 50) | `int` | No
+`-n` / `--min` | MultiSeg only - sets minimum read length nucleotides (Default = 300) | `int` | No
+`--fragment` | MultiSeg only - Fragment reads, (Default = False)  | - | No
+`-x` / `--num` | MultiSeg only - Number of fragments, (Default = 100000) | `int` | No
+`-l` / `--len` | MultiSeg only - Average read length for fragments, (Default = 300) | `int` | No
+`-s` / `--std` | MultiSeg only - Length standard deviation for fragments, (Default = 50)) | `int` | No
+`-w` / `--win` | MultiSeg2 only - Window for reads at the start and end of segment | `int` | No
 
 
 <br>
@@ -123,28 +125,33 @@ Flag | Description | Type | Required
 ### Methods:
 <br>
 
-_MBP_
-<br>Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
+#### MBP
+Lengths with break point and reintination point in the middle of the resulting read with all reads at a given whole read length.
 
+<br>
 
-_INDEL_
-<br>Lengths with break point and reintination point in a random point in the resulting read with all reads at a given whole read length.
+#### INDEL
+Lengths with break point and reintination point in a random point in the resulting read with all reads at a given whole read length.
 
+<br>
 
-_Copyback_
-<br>Generates copy back reads from 3' and 5', with a random segment in middle before copying back, also include snapback (no segment between reverse copied read) with all reads at a given whole read length.
+#### Copyback
+Generates copy back reads from 3' and 5', with a random segment in middle before copying back, also include snapback (no segment between reverse copied read) with all reads at a given whole read length.
 
+<br>
 
-_MultiSeg_
-<br>Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
+#### MultiSeg
+Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
 
+<br>
 
-_MultiSeg2_
-<br>Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
+#### MultiSeg
+Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
 
+<br>
 
-_NoDIP_
-<br>Lengths created as just fragments of an existing genomes, i.e. reads with no dips.
+#### NoDIP
+Lengths created as just fragments of an existing genomes, i.e. reads with no dips.
 
 <br>
 
@@ -214,11 +221,11 @@ OutParse.py [options]
 Flag | Description | Type | Required
 :--- | :---------- | :--- | --------:
 `-s` / `--sim` | Simulated data output csv file | `String` | No
-`-d` / `--ditector` | Maximum read length | `String` | __Yes__
-`-v` / `--virema` | Total number of reads | `String` | __Yes__
+`-d` / `--ditector` | DI-Tector output file - DI-Tector_output_sorted.txt | `String` | __Yes__
+`-v` / `--virema` | ViReMa output file - Virus_Recombination_Results.txt | `String` | __Yes__
 `-o` / `--outfile` | Output directory | `String` | __Yes__
-`--std` | Standard deviation for matches | `String` | No
-`-f` / `--fasta` | Simulated reads fasta file | `String` | No
+`--std` | Standard deviation for matches (Default = 0) | `String` | No
+`-f` / `--fasta` | Creates fasta file of unfound simulated DIPs | `String` | No
 
 <br>
 
@@ -256,7 +263,7 @@ Flag | Description | Type | Required
 `--s4` | Sample 4 parser_out.csv file | `String` | No
 `--s5` | Sample 5 parser_out.csv file | `String` | No
 `-o` | Output directory | `String` | __Yes__
-`--cut` | Simulated reads fasta file | `int` | No
+`--cut` | Cut off for number of DIPs matched between tools (Default = 0) | `int` | No
 
 <br>
 <br>
@@ -266,7 +273,7 @@ Flag | Description | Type | Required
 
 <br>
 
-Program to
+Program to create bed file from DI-Tector output, uses DI-Tector_counts.txt
 
 <br>
 

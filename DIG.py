@@ -7,7 +7,7 @@ def main(argv):
 
 	parser = argparse.ArgumentParser(description="A program to generate Defective Interfering particles with 4 different methods")
 
-	# Positional 
+	# Positional arguments
 	parser.add_argument("simMethod", help="Method for simulation; either MBP, INDEL, Copyback, MultiSeg")
 
 	# Flagged arguments
@@ -16,7 +16,6 @@ def main(argv):
 	parser.add_argument("-m", "--max", type=int, required=True, help="Max read length")
 	parser.add_argument("-t", "--total", type=int, required=True, help="Total reads")
 
-	parser.add_argument("--tn", type=int, required=False, help="True Negatives read numbers (Can't use in MultiSeg")
 	parser.add_argument("-c", "--copybackratio", required=False, help="copyback ratio; 5 copyback, 5 snapback, 3 copyback, 3 snapback (*comma separated, must add up to 1)  - for Copyback")
 	parser.add_argument("--seg", type=int, required=False, help="For single segment use: fasta file number, only use if multisegment fasta file is input")
 	parser.add_argument("--min", "-n", type=int, required=False, help="Min read length - for MultiSeg")
@@ -77,14 +76,15 @@ def main(argv):
 
 	if args.seg:
 		seg = args.seg
-		refGenome = refGenome[seg-1]
+		refGenome = refGenome[seg-1] # Retreives chosen segment 
 		print("DIPs produced from segment "+ refGenome.id)
 	else:
 		while type(refGenome) == list:
 			if "MultiSeg" in args.simMethod:
 				break # Allows for multi segments for option
-			refGenome = refGenome[0]
+			refGenome = refGenome[0] # Defaults to 1st segment
 
+	# Take arguments:
 	if args.win:
 		window = args.win
 	else:

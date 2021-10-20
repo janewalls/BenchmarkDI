@@ -67,14 +67,16 @@ def simParse(dataDict, simData, totalList): # puts into CSV alongside simulated 
 	simDict = {}
 	simRef= {} # Contains read numbers for later fasta
 	simData = open(simData, "r")
-	simData.readline()
+	simData.readline() # Skips header line
 
-	totCount = 0 # Total DIP read count
+	totCount = 0 # Total DIP read counter
 
-	for line in simData:
-		lineList = line.split("\t")
+	for line in simData: # reading each line
+		lineList = line.split("\t") # creating a list of items in each line
 		totCount += 1
 
+		# Finds break point / ri and their respective segments
+			# Differing locations depending 
 		if len(lineList) == 7:
 			bp = int(lineList[3])
 			ri = int(lineList[5])
@@ -91,14 +93,15 @@ def simParse(dataDict, simData, totalList): # puts into CSV alongside simulated 
 			segA = int(lineList[1])
 			segB =	int(lineList[1])		
 	
+		# Puts information as key in dictionary
 		if (segA,bp,segB,ri) in simDict:
-			simDict[(segA,bp,segB,ri)] +=1 
+			simDict[(segA,bp,segB,ri)] +=1 # If already exists adds count
 		else:
-			simDict[(segA,bp,segB,ri)] = 1 
+			simDict[(segA,bp,segB,ri)] = 1 # If hasn't been seen
 			simRef[(segA,bp,segB,ri)] = lineList[0]
 
-	
-	dataDict.update({"simDict": simDict})
+	# Update dictionarys and lists
+	dataDict.update({"simDict": simDict}) 
 	dataDict.update({"simRef": simRef})
 	totalList.append(["simDict", totCount])
 
@@ -125,10 +128,11 @@ def ditParse(dataDict, outDIT, totalList): # Parses DI-tector output
 		segB = int(lineList[9].split("seg")[1])
 
 		totCount += 1
+		# Puts information on to dictionary with info as key
 		if (segA, bp, segB, ri) in ditDict:
-			ditDict[(segA, bp, segB, ri)] += 1 
+			ditDict[(segA, bp, segB, ri)] += 1 # If already seen
 		else:
-			ditDict[(segA, bp, segB, ri)] = 1 
+			ditDict[(segA, bp, segB, ri)] = 1 # If not seen, creates new item
 
 	dataDict.update({"ditDict": ditDict})
 	totalList.append(["ditDict", totCount])
@@ -147,6 +151,7 @@ def virParse(dataDict, outVir, totalList, keep): # Parses ViReMa output
 				continue
 			lineList = line.split(" ")
 			lineList = lineList[1].split("_")
+			# Exctract segment information
 			segA = int(lineList[0].split("seg")[1])
 			if lineList[1] == "RevStrand":
 				#segA += "R"
@@ -187,6 +192,7 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 
 	unidList = []
 
+	# Total read, and DIP matches
 	ditTotMatch = 0
 	virTotMatch = 0
 	ditDipMatch = 0
@@ -195,23 +201,25 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 	ditUnct = 0
 	ditDipUnct = 0
 	
-	for key in  simDict.keys():
+	for key in  simDict.keys(): # Checks all simulated DIPs
 		ditCount = 0
 		virCount = 0
 
+		# Checks if ViReMa found DIP, within STD
 		filtDict= {k: v for k, v in virDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			virCount += filtDict[x]
 			virTotMatch += filtDict[x]
 			virDipMatch +=1
-			del virDict[x] # Same as above
+			del virDict[x]  # items will only be counted once if sd > 0, and will be counted under first shown
 		
+		# Checks if ViReMa found DIP, within STD
 		filtDict= {k: v for k, v in ditDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			ditCount += filtDict[x]
 			ditTotMatch += filtDict[x]
 			ditDipMatch += 1
-			del ditDict[x]  # items will only be counted once if sd > 0, and will be counted under first shown
+			del ditDict[x]  # Same as above
 
 
 		outString = str(key[0]) + "\t" + str(key[1]) + "\t" + str(key[2]) + "\t" + str(key[3]) + "\t" + str(simDict[key]) + "\t" + str(ditCount) + "\t" + str(virCount) + "\n"
@@ -248,6 +256,7 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 		ditUnct += ditDict[x]
 		ditDipUnct += 1
 	
+	# Creating strings for summary file 
 	totSim = "Total sim reads" + "\t" + str(totalList[2][1]) + "\n"
 	totDit = "Total DITector Reads" + "\t" + str(totalList[0][1]) + "\n"
 	totVir = "Total ViReMa Reads" + "\t" + str(totalList[1][1]) + "\n"
@@ -271,7 +280,7 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 	print("\nAction Complete, File Saved\n")
 
 
-def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongside simulated reads
+def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV without simulated data
 
 	output = open((outputPath + "/parser_output.csv"), "w")
 	output.write("BP_seg" + "\t" + "BP" + "\t" + "RI_seg" + "\t" + "RI" + "\t" + "DITector_count" + "\t" + "ViReMa_count" + "\n")
@@ -287,22 +296,25 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongs
 
 	delList = []
 
-	for key in ditDict.keys():
+	for key in ditDict.keys(): # Runs though DI-Tector DIPs
 		virCount = 0
+		# Checks if ViReMa found as well 
 		filtDict= {k: v for k, v in virDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
-			virCount += filtDict[x]
+			virCount += filtDict[x] 
 			totMatch += filtDict[x]
 			dipMatch +=1
 			del virDict[x] # Same as above
-		if virCount > cutOff or ditDict[key] > cutOff:
+		if virCount > cutOff or ditDict[key] > cutOff: # Notes DIP if above cut off
 			outString = str(key[0]) + "\t" + str(key[1]) + "\t" + str(key[2]) + "\t" + str(key[3]) + "\t" + str(ditDict[key]) + "\t" + str(virCount) + "\n"
 			output.write(outString)
 		delList.append(key)
 	
+	# Deletes items that have been matched with ViReMa
 	for key in delList:
 		del ditDict[key]
 
+	# Finds unmatched DIPs 
 	virUnct = 0	
 	virDipUnct = 0	
 	for x in virDict:
@@ -314,6 +326,7 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongs
 
 	output.close()
 
+	# Find number of DIPs that didn't match with ViReMa
 	ditUnct = 0
 	ditDipUnct = 0
 	for x in ditDict:
@@ -322,6 +335,7 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV alongs
 
 	summaryFile = open((outputPath + "/Summary_results.txt"), "w")
 
+	# Creating strings for summary file 
 	totDit = "Total DITector Reads" + "\t" + str(totalList[0][1]) + "\n"
 	totVir = "Total ViReMa Reads" + "\t" + str(totalList[1][1]) + "\n"
 	totDipDit = "Total DITector DIPs" + "\t" + str(totDipDit) + "\n"
