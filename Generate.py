@@ -12,8 +12,8 @@ def MBP(refGenome, outDir, maxLen, totalReads):
 	readOutput = outDir + "/SimMBP.fasta"
 	summaryOutput = outDir + "/SimMBP.csv"
 
+	# Open summary file and writes header
 	summaryFile = open(summaryOutput, "w")
-
 	summaryFile.write("Read #" + "\t" + "Seg#" + "\t" + "Start" + "\t" + "BP" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	n = int(maxLen/2)
@@ -28,28 +28,28 @@ def MBP(refGenome, outDir, maxLen, totalReads):
 
 	while count < totalReads:
 		while True:
-			pos1 = random.randint(0,(lenGenome - n))
-			pos2 = random.randint(0,(lenGenome - n))
+			bp = random.randint(n,(lenGenome - n)) 
+			ri = random.randint(n,(lenGenome - n))
 
-			if ((pos2 > pos1 + n) or (pos1 > pos2 + n)):
+			if ((ri > bp - n) or (bp > ri + n)): # Ensure no overlap
 				break
 
-		seq1 = str(refGenome.seq[pos1:(pos1+n)])
-		seq2 = str(refGenome.seq[pos2:(pos2+n)])
+		seq1 = str(refGenome.seq[(bp-n):bp])
+		seq2 = str(refGenome.seq[ri:(ri+n)])
 
 		count += 1
 		dI = seq1 + seq2
 
-        
+        # Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(dI,),
 			id=assNo,
-			description=str(pos1) + "-" + str(pos1+n) + "," + str(pos2) + "-" + str(pos2+n),
+			description=str(bp-n) + "-" + str(bp) + "," + str(ri) + "-" + str(ri+n),
 		)	
 
 		reads.append(rec) # Adds new reads to list
 
-		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(pos1) + "\t" + str(pos1+n) + "\t" + str(pos2) + "\t" + str(pos2+n) + "\n") # Save summary info to file
+		summaryFile.write(str(count) + "\t" + str(seg) + "\t" + str(bp-n) + "\t" + str(bp) + "\t" + str(ri) + "\t" + str(ri+n) + "\n") # Save summary info to file
 
 	SeqIO.write(reads, readOutput, "fasta") # Save reads to fasta file 
     
@@ -64,8 +64,8 @@ def INDEL(refGenome, outDir, maxLen, totalReads):
 	readOutput = outDir + "/SimIndel.fasta"
 	summaryOutput = outDir + "/SimIndel.csv"
 
-	summaryFile = open(summaryOutput, "w")
-
+	# Open summary file and writes header
+	summaryFile = open(summaryOutput, "w") 
 	summaryFile.write("Read #" + "\t" + "Seg#" + "\t" + "Start" + "\t" + "BP" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	count = 0
@@ -91,6 +91,7 @@ def INDEL(refGenome, outDir, maxLen, totalReads):
 			count += 1
 			dI = seq1 + seq2
 
+			# Creates Seq object with read information
 			rec = SeqRecord(
 				Seq(dI,),
 				id=assNo,
@@ -115,8 +116,8 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 	readOutput = outDir + "/SimCopyBack.fasta"
 	summaryOutput = outDir + "/SimCopyBack.csv"
 
+	# Open summary file and writes header
 	summaryFile = open(summaryOutput, "w")
-
 	summaryFile.write("Read #" + "\t" + "Seg#" + "\t" + "Start" + "\t" + "BP" + "\t" + "RI" + "\t" + "loop_end" + "\t" + "BP" + "\t" + "End" + "\n")
 
 	count = 0
@@ -137,13 +138,14 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 			if bP < rI:
 				break
 			
-		seq1 = refGenome.seq[(bP-frag1):bP] # Finds sequence
+		seq1 = refGenome.seq[(bP-frag1):bP] # Finds sequence until BP
 		seq2 = str(seq1.reverse_complement()) # reverse compliment on 5' end
-		seq3 = str(refGenome.seq[rI:(rI+frag2)])
+		seq3 = str(refGenome.seq[rI:(rI+frag2)]) # 
 
 		count += 1
 		dI = str(seq1) + seq3 + seq2
 
+		# Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(dI,),
 			id=assNo,
@@ -165,6 +167,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 		count += 1
 		dI = str(seq1) + seq2
 
+		# Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(dI,),
 			id=assNo,
@@ -195,6 +198,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 		count += 1
 		dI = seq3 + seq1 + str(seq2)
 
+		# Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(dI,),
 			id=assNo,
@@ -217,6 +221,7 @@ def CopyBack(refGenome, outDir, maxLen, totalReads, cb5, sb5, cb3):
 		count += 1
 		dI = seq2 + str(seq1)
 
+		# Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(dI,),
 			id=assNo,
@@ -243,8 +248,8 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 	readOutput = outDir + "/SimMultiSeg.fasta"
 	summaryOutput = outDir + "/SimMultiSeg.csv"
 
+	# Open summary file and writes header
 	summaryFile = open(summaryOutput, "w")	
-
 	summaryFile.write("Read#" + "\t" + "Seg#"  + "\t" + "Start" + "\t" + "BP" + "\t" + "Seg#" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	count = 0
@@ -273,6 +278,7 @@ def MultiSeg(records, outDir, maxLen, minLen, totalReads, frag, fnum, flen, fstd
 		count += 1
 		dI = str(seq1) + seq2
 
+		# Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(dI,),
 			id=str(seg1.id + "," + seg2.id),
@@ -329,6 +335,7 @@ def Fragment(fastaFile, bpList, outDir, num, ln, std):
 			else:
 				bPBool = False
 
+			# Creates Seq object with read information
 			rec = SeqRecord(
 				Seq(frag,),
 				id=str(read.id),
@@ -353,8 +360,8 @@ def MultiSeg2(records, outDir, maxLen, window, totalReads):
 	readOutput = outDir + "/SimMultiSeg2.fasta"
 	summaryOutput = outDir + "/SimMultiSeg2.csv"
 
+	# Open summary file and writes header
 	summaryFile = open(summaryOutput, "w")
-
 	summaryFile.write("Read#" + "\t" + "Seg#"  + "\t" + "Start" + "\t" + "BP" + "\t" + "Seg#" + "\t" + "RI" + "\t" + "End" + "\n")
 
 	count = 0
@@ -386,6 +393,7 @@ def MultiSeg2(records, outDir, maxLen, window, totalReads):
 			count += 1
 			dI = str(seq1) + str(seq2)
 
+			# Creates Seq object with read information
 			rec = SeqRecord(
 				Seq(dI,),
 				id=str(seg1.id + "," + seg2.id),
@@ -414,6 +422,7 @@ def NoDIP(refGenome, outDir, maxLen, totalReads):
 	readOutput = outDir + "/SimNoDIP.fasta"
 	summaryOutput = outDir + "/SimNoDIP.csv"
 
+	# Open summary file and writes header
 	summaryFile = open(summaryOutput, "w")
 	summaryFile.write("Read#" "\t" + "Seg#" + "\t" + "Start" + "\t" + "End" + "\n")
 
@@ -424,6 +433,7 @@ def NoDIP(refGenome, outDir, maxLen, totalReads):
 		start = random.randint(0,(lenGenome - maxLen))
 		seq = str(refGenome.seq[start:(start+maxLen)])
 		
+		# Creates Seq object with read information
 		rec = SeqRecord(
 			Seq(seq,),
 			id=assNo,

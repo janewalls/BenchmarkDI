@@ -9,6 +9,7 @@ def main(argv):
 	
 	parser = argparse.ArgumentParser(description="A program to generate Defective Interfering particles with 4 different methods")
 
+	# Create flag arguments
 	parser.add_argument("-d", "--ditector", required=True, help="DI-Tector output file: DI-tector_output_sorted.txt")
 	parser.add_argument("-v", "--virema", required=True, help="ViReMa output file: Virus_Recombination_Results.txt")
 	parser.add_argument("-o", "--outdir", required=True, help="Output Directory")
@@ -20,10 +21,11 @@ def main(argv):
 
 	args = parser.parse_args()
 
-	dataDict = {} # Initiate nested dictionary
+	dataDict = {} # Initiate nested dictionary for info
 
 	totalList = []
 	
+	# Assign flag inputs to variables
 	if args.keep:
 		keep = True
 	else:
@@ -31,10 +33,10 @@ def main(argv):
 
 	if args.ditector:
 		outDIT = args.ditector
-		ditParse(dataDict, outDIT, totalList)
+		ditParse(dataDict, outDIT, totalList) # Puts DI-Tector results in dictionary
 	if args.virema:
 		outVir = args.virema
-		virParse(dataDict, outVir, totalList, keep)
+		virParse(dataDict, outVir, totalList, keep) # Puts ViReMa results in dictionary
 	if args.std:
 		std = args.std
 	else:
@@ -53,17 +55,16 @@ def main(argv):
 		print("Requires output directory!")
 	if args.sim:
 		actual = args.sim
-		simParse(dataDict, actual, totalList)
-		compile(parsed_out, dataDict, std, fasta, totalList)
+		simParse(dataDict, actual, totalList) # Puts simulated DIP info in dictionary
+		compile(parsed_out, dataDict, std, fasta, totalList) # Compares tools with simulated data
 	else:
-		compare(parsed_out, dataDict, std, cutOff, totalList)
+		compare(parsed_out, dataDict, std, cutOff, totalList) # Compares tools between themselves
 	
 
 
 
-# bp ri simCount, ditCount, viCount
 
-def simParse(dataDict, simData, totalList): # puts into CSV alongside simulated reads
+def simParse(dataDict, simData, totalList): # Takes csv and puts into searchable dictionary
 	simDict = {}
 	simRef= {} # Contains read numbers for later fasta
 	simData = open(simData, "r")
@@ -76,7 +77,7 @@ def simParse(dataDict, simData, totalList): # puts into CSV alongside simulated 
 		totCount += 1
 
 		# Finds break point / ri and their respective segments
-			# Differing locations depending 
+			# Differing locations depending on simulation type
 		if len(lineList) == 7:
 			bp = int(lineList[3])
 			ri = int(lineList[5])
@@ -183,6 +184,7 @@ def virParse(dataDict, outVir, totalList, keep): # Parses ViReMa output
 
 def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongside simulated reads
 
+	# Open file and write header 
 	output = open((outputPath + "/parser_output.csv"), "w")
 	output.write("BP_seg" + "\t" + "BP" + "\t" + "RI_seg" + "\t" + "RI" + "\t" + "Sim_Count" + "\t" + "DITector_count" + "\t" + "ViReMa_count" + "\n")
 	
@@ -205,15 +207,15 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 		ditCount = 0
 		virCount = 0
 
-		# Checks if ViReMa found DIP, within STD
+		# Checks if ViReMa found DIP, within STD - searches dictionary
 		filtDict= {k: v for k, v in virDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			virCount += filtDict[x]
 			virTotMatch += filtDict[x]
 			virDipMatch +=1
-			del virDict[x]  # items will only be counted once if sd > 0, and will be counted under first shown
+			del virDict[x]  # delete item in list to ensure not double counted
 		
-		# Checks if ViReMa found DIP, within STD
+		# Checks if ViReMa found DIP, within STD - searches dictionary
 		filtDict= {k: v for k, v in ditDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			ditCount += filtDict[x]
@@ -221,10 +223,11 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 			ditDipMatch += 1
 			del ditDict[x]  # Same as above
 
-
+		# Write DIP line in parser output file
 		outString = str(key[0]) + "\t" + str(key[1]) + "\t" + str(key[2]) + "\t" + str(key[3]) + "\t" + str(simDict[key]) + "\t" + str(ditCount) + "\t" + str(virCount) + "\n"
 		output.write(outString)
 
+		# If not found in either tool
 		if ditCount == 0 and virCount == 0:
 			unidList.append([key])
 
@@ -240,16 +243,19 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 			pos = simRef[key]
 
 			outFasta.write(">" + reads[pos] + "\n")
+	outFasta.close()
 
 	# Creates summary file 
 	summaryFile = open((outputPath + "/Summary_results.txt"), "w")
 
+	# Finds ViReMa Unmatched DIPs/Reads
 	virUnct = 0	
 	virDipUnct = 0	
 	for x in virDict:
 		virUnct += virDict[x]
 		virDipUnct += 1
 
+	# Finds DI-Tector Unmatched DIPs/Reads
 	ditUnct = 0
 	ditDipUnct = 0
 	for x in ditDict:
@@ -272,23 +278,24 @@ def compile(outputPath, dataDict, sd, fasta, totalList): # puts into CSV alongsi
 	unDipDit = "DITector UnMatched DIPs" + "\t" + str(ditDipUnct) + "\n"
 	unDipVir = "ViReMa UnMatched DIPs" + "\t" + str(virDipUnct) 
 	
+	# Write summary file
 	summaryFile.write(totSim + totDit + totVir + matDit + matVir + unDit + unVir + simDip + matDipDit + matDipVir + unDipDit + unDipVir)
 	summaryFile.close()
-
-	
 
 	print("\nAction Complete, File Saved\n")
 
 
 def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV without simulated data
 
+	# Open file and write header
 	output = open((outputPath + "/parser_output.csv"), "w")
 	output.write("BP_seg" + "\t" + "BP" + "\t" + "RI_seg" + "\t" + "RI" + "\t" + "DITector_count" + "\t" + "ViReMa_count" + "\n")
 	
 	ditDict = dataDict["ditDict"]	
 	virDict = dataDict["virDict"]
 
-	totDipDit = len(ditDict)
+	# Number of DIPs in each DIP from the respective tools
+	totDipDit = len(ditDict) 
 	totDipVir = len(virDict)
 
 	totMatch = 0
@@ -298,14 +305,14 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV withou
 
 	for key in ditDict.keys(): # Runs though DI-Tector DIPs
 		virCount = 0
-		# Checks if ViReMa found as well 
+		# Checks if ViReMa found as well - searches dictionary
 		filtDict= {k: v for k, v in virDict.items() if (k[0] == key[0] and k[2] == key[2]) and (k[1]+sd >= key[1] and k[1]-sd <= key[1]) and (k[3]+sd >= key[3] and k[3]-sd <= key[3])}
 		for x in filtDict:
 			virCount += filtDict[x] 
 			totMatch += filtDict[x]
 			dipMatch +=1
-			del virDict[x] # Same as above
-		if virCount > cutOff or ditDict[key] > cutOff: # Notes DIP if above cut off
+			del virDict[x] # delete item in list to ensure not double counted
+		if virCount > cutOff or ditDict[key] > cutOff: # Notes DIP if count/occurance above cut off
 			outString = str(key[0]) + "\t" + str(key[1]) + "\t" + str(key[2]) + "\t" + str(key[3]) + "\t" + str(ditDict[key]) + "\t" + str(virCount) + "\n"
 			output.write(outString)
 		delList.append(key)
@@ -314,12 +321,13 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV withou
 	for key in delList:
 		del ditDict[key]
 
-	# Finds unmatched DIPs 
+	
 	virUnct = 0	
 	virDipUnct = 0	
 	for x in virDict:
 		virUnct += virDict[x]
 		virDipUnct += 1
+		# Adds extra ViReMa counts that aren't found in DI-Tector, so long as cut off allows
 		if cutOff == 0:
 			outString = str(x[0]) + "\t" + str(x[1]) + "\t" + str(x[2]) + "\t" + str(x[3]) + "\t" + str(0) + "\t" + str(virDict[x]) + "\n"
 			output.write(outString)
@@ -349,6 +357,7 @@ def compare(outputPath, dataDict, sd, cutOff, totalList): # puts into CSV withou
 	unDipDit = "DITector UnMatched DIPs" + "\t" + str(ditDipUnct) + "\n"
 	unDipVir = "ViReMa UnMatched DIPs" + "\t" + str(virDipUnct)
 
+	# Write summary file
 	summaryFile.write(totDit + totVir + totDipDit + totDipVir + mat + unDit + unVir + matDip + unDipDit + unDipVir)
 	summaryFile.close()
 

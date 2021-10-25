@@ -145,8 +145,8 @@ Reads created from first and last 600nt at random lengths within a given minimum
 
 <br>
 
-#### MultiSeg
-Reads created from first and last 600nt at random lengths within a given minimum and maximum, from random segments.
+#### MultiSeg2
+Reads created from first and last chosen window of nucleotides at a set length, from random segments.
 
 <br>
 
@@ -163,20 +163,20 @@ Lengths created as just fragments of an existing genomes, i.e. reads with no dip
 ### Examples: 
 
 _MBP_
-<br>`DIG.py MBP -f reference.fasta -o outputDirectory -m 180 -t 100000`
+<br>`DIG.py MBP -f reference.fasta -o outputDirectory -m 150 -t 100000 --seg 1`
 
 _INDEL_
-<br>`DIG.py INDEL -f reference.fasta -o outputDirectory -m 180 -t 100000`
+<br>`DIG.py INDEL -f reference.fasta -o outputDirectory -m 150 -t 100000 --seg 2`
 
 _Copyback_
-<br>`DIG.py Copyback -f reference.fasta -o outputDirectory -m 180 -t 100000 -c 0.45,0.05,0.45,0.05`
+<br>`DIG.py Copyback -f reference.fasta -o outputDirectory -m 150 -t 100000 -c 0.45,0.05,0.45,0.05`
 
 _MultiSeg_
 <br>With fragmentation:<br> `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 1200 -t 1000 -n 300 -s 50 --fragment -x 100000 -l 300 -s 50`
 <br>Without fragmentation:<br> `DIG.py MultiSeg -f reference.fasta -o outputDirectory -m 180 -t 100000 -n 300 -s 50`
 
 _MultiSeg2_
-<br>`DIG.py MultiSeg2 -f reference.fasta -o outputDirectory -m 150 -t 100000`
+<br>`DIG.py MultiSeg2 -f reference.fasta -o outputDirectory -m 150 -t 100000 -w 600`
 
 _NoDIP_
 <br>`DIG.py NoDIP -f reference.fasta -o outputDirectory -m 150 -t 100000`
@@ -224,7 +224,7 @@ Flag | Description | Type | Required
 `-d` / `--ditector` | DI-Tector output file - DI-Tector_output_sorted.txt | `String` | __Yes__
 `-v` / `--virema` | ViReMa output file - Virus_Recombination_Results.txt | `String` | __Yes__
 `-o` / `--outfile` | Output directory | `String` | __Yes__
-`--std` | Standard deviation for matches (Default = 0) | `String` | No
+`--std` | Standard deviation for matches (Default = 0) | `int` | No
 `-f` / `--fasta` | Creates fasta file of unfound simulated DIPs | `String` | No
 
 <br>
@@ -310,5 +310,7 @@ _(1) MBP method;_ <br>Routh, A. and Johnson, J.E., 2014. Discovery of functional
 
 _(2) INDEL method_ & _Copyback method;_  <br>Beauclair, G., Mura, M., Combredet, C., Tangy, F., Jouvenet, N. and Komarova, A.V., 2018. DI-tector: defective interfering viral genomes’ detector for next-generation sequencing data. RNA, 24(10), pp.1285-1296.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6140465/
 
-_(3) MultiSeg method;_ <br>Alnaji, F.G., Holmes, J.R., Rendon, G., Vera, J.C., Fields, C.J., Martin, B.E. and Brooke, C.B., 2019. Sequencing framework for the sensitive detection and precise mapping of defective interfering particle-associated deletions across influenza A and B viruses. Journal of virology, 93(11), pp.e00354-19.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6532088/
+_(3) MultiSeg methods;_ <br>Alnaji, F.G., Holmes, J.R., Rendon, G., Vera, J.C., Fields, C.J., Martin, B.E. and Brooke, C.B., 2019. Sequencing framework for the sensitive detection and precise mapping of defective interfering particle-associated deletions across influenza A and B viruses. Journal of virology, 93(11), pp.e00354-19.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6532088/
 
+_(4) DIG's Supporting Paper;_ <br> Benchmarking a pipeline for detecting defective interfering particles from Next Generation Sequencing data
+ [paper](https://github.com/janewalls/DIG/tree/main/Example_BashScripts/DIG_SupportingPaper.pdf) 
