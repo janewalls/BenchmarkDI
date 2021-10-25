@@ -313,4 +313,4 @@ _(2) INDEL method_ & _Copyback method;_  <br>Beauclair, G., Mura, M., Combredet,
 _(3) MultiSeg methods;_ <br>Alnaji, F.G., Holmes, J.R., Rendon, G., Vera, J.C., Fields, C.J., Martin, B.E. and Brooke, C.B., 2019. Sequencing framework for the sensitive detection and precise mapping of defective interfering particle-associated deletions across influenza A and B viruses. Journal of virology, 93(11), pp.e00354-19.<br>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6532088/
 
 _(4) DIG's Supporting Paper;_ <br> Benchmarking a pipeline for detecting defective interfering particles from Next Generation Sequencing data
- [paper](https://github.com/janewalls/DIG/tree/main/Example_BashScripts/DIG_SupportingPaper.pdf) 
+ [paper](https://github.com/janewalls/DIG/tree/main/Example_BashScripts/DIG_Supporting_Paper.pdf) 
